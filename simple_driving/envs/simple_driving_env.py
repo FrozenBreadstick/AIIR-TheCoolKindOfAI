@@ -31,8 +31,10 @@ class SimpleDrivingEnv(gym.Env):
                 low=np.array([-1, -.6], dtype=np.float32),
                 high=np.array([1, .6], dtype=np.float32))
         self.observation_space = gym.spaces.box.Box(
-            low=np.array([-40, -40, -40, -40, 0], dtype=np.float32),
-            high=np.array([40, 40, 40, 40, 1], dtype=np.float32))
+            low=np.array([-40, -40, -40, -40, 0] + [0]*36, dtype=np.float32),
+            high=np.array([40, 40, 40, 40, 1] + [1]*36, dtype=np.float32),
+            shape=(41,),
+            dtype=np.float32)
         self.np_random, _ = gym.utils.seeding.np_random()
 
         if renders:
@@ -51,6 +53,7 @@ class SimpleDrivingEnv(gym.Env):
         self.obstacle_object = None
         self.obstacle_pos = None
         self.has_obstacle = False
+        self.lidar_readings = None
         self.done = False
         self.prev_dist_to_goal = None
         self.rendered_img = None
@@ -119,6 +122,7 @@ class SimpleDrivingEnv(gym.Env):
                  goal_pos=goal_pos,
                  obstacle_pos=self.obstacle_pos,
                  has_obstacle=self.has_obstacle,
+                 lidar_readings=self.lidar_readings, # added this for adding the lidar to the callback
                  prev_dist_to_goal=self.prev_dist_to_goal,
                  dist_to_goal=dist_to_goal,
                  reached_goal=self.reached_goal
@@ -258,17 +262,21 @@ class SimpleDrivingEnv(gym.Env):
         car_pos, car_orn = self._p.getBasePositionAndOrientation(self.car.car)
         goal_pos, goal_orn = self._p.getBasePositionAndOrientation(self.goal_object.goal)
         
+        # lidar stuff
+        self.lidar_readings = self.car.get_lidar_readings()
+
         if self.observation_callback is not None:
-             # Calculate observation block via external student function
-             return self.observation_callback(
-                 client=self._p,
-                 car_pos=car_pos,
-                 car_orn=car_orn,
-                 goal_pos=goal_pos,
-                 goal_orn=goal_orn,
-                 obstacle_pos=self.obstacle_pos,
-                 has_obstacle=self.has_obstacle
-             )
+            # Calculate observation block via external student function
+            return self.observation_callback(
+                client=self._p,
+                car_pos=car_pos,
+                car_orn=car_orn,
+                goal_pos=goal_pos,
+                goal_orn=goal_orn,
+                obstacle_pos=self.obstacle_pos,
+                has_obstacle=self.has_obstacle,
+                lidar_readings=self.lidar_readings # added this for adding the lidar to the callback
+            )
         else:
              raise ValueError("No observation_callback provided to SimpleDrivingEnv! You must inject the observation logic.")
 

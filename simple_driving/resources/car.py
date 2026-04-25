@@ -1,6 +1,8 @@
 import pybullet as p
 import os
 import math
+import numpy as np
+
 
 class Car:
     def __init__(self, client):
@@ -20,8 +22,58 @@ class Car:
         # Throttle constant increases "speed" of the car
         self.c_throttle = 100
 
+        # *claude* LiDAR parameters
+        self.lidar_range = 10.0  # Maximum range in meters
+        self.num_rays = 36  # Number of laser rays (1-degree resolution)
+
     def get_ids(self):
         return self.car
+
+    # *claude* get lidar link
+    def get_lidar_link_id(self):
+        """Find the LiDAR link ID"""
+        num_joints = self.client.getNumJoints(self.car)
+        for i in range(num_joints):
+            joint_info = self.client.getJointInfo(self.car, i)
+            if joint_info[12].decode('utf-8') == 'lidar_link':
+                return i
+        return -1
+
+    # *chat* get lidar readings    
+    def get_lidar_readings(self):
+        lidar_link_id = self.get_lidar_link_id()
+        if lidar_link_id == -1:
+            return np.zeros(self.num_rays)
+
+        link_state = self.client.getLinkState(self.car, lidar_link_id)
+        lidar_pos = link_state[0]
+        lidar_orn = link_state[1]
+
+        yaw = p.getEulerFromQuaternion(lidar_orn)[2]
+
+        ray_from = []
+        ray_to = []
+
+        for i in range(self.num_rays):
+            angle = yaw + 2 * math.pi * i / self.num_rays
+            dx = math.cos(angle)
+            dy = math.sin(angle)
+
+            ray_from.append(lidar_pos)
+            ray_to.append([
+                lidar_pos[0] + dx * self.lidar_range,
+                lidar_pos[1] + dy * self.lidar_range,
+                lidar_pos[2]
+            ])
+
+        results = self.client.rayTestBatch(ray_from, ray_to)
+
+        distances = []
+        for i, r in enumerate(results):
+            hit_fraction = r[2]
+            distances.append(hit_fraction * self.lidar_range)
+
+        return np.array(distances)
 
     def apply_action(self, action):
         # Expects action to be two dimensional
