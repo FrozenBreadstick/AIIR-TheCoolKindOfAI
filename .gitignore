@@ -209,3 +209,6 @@ __marimo__/
 
 # CloudCompare Projects
 *.bin
+
+#Other config stuff
+*.ini
