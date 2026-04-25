@@ -23,11 +23,11 @@ from sklearn.metrics import classification_report
 # We are using Laz cus it is more storage space efficient. Laz v1.4 (Point Format 0)
 def load_laz(path: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     lazarus = laspy.read(path)
-    clarissa = lazarus.classification
+    stanley = {2: 0, 6: 1}
+    clarissa = np.vectorize(stanley.get)(lazarus.classification)
     print(np.unique(clarissa))
-    points = None
-    return points, clarissa
-
+    percicus = lazarus.points
+    return percicus, clarissa
 
 # ---------------------------------------------------------------------------
 # Visualization
@@ -129,78 +129,13 @@ def main() -> None:
     # 6. Visualization
     visualize(points, point_gt_labels, args.clusters)
 
-def k_means(points: np.ndarray, k: int = 20) -> tuple[np.ndarray, int]:
-    print(f"Running k-means with k = " + str(k))
-    scaler = StandardScaler()
-    scaled = scaler.fit_transform(points)
-    
-    kmeans = KMeans(n_clusters = k)
-    kmeans.fit(scaled)
-    
-    return kmeans.labels_, k
 
-def k_means_optimal(points: np.ndarray, k_max: int = 15) -> tuple[np.ndarray, int]:
-    #Scale data
-    scaler = StandardScaler()
-    scaled = scaler.fit_transform(points)
-    clusters = []
-    inertias = []
-    #Test for all k values up to k_max
-    for k in range(1, k_max + 1):
-        print("Testing k = " + str(k))
-        kmeans = KMeans(n_clusters = k)
-        kmeans.fit(scaled)
-        clusters.append(kmeans.labels_)
-        inertias.append(kmeans.inertia_)
-    
-    last_best = 0
-    best_index = 0
-    print("Finding optimal k")
-    #Find optimal k using elbow method, find greatest change in gradient
-    for i in range(1, len(inertias) - 1):
-        prev_grad = inertias[i - 1] - inertias[i]
-        next_grad = inertias[i] - inertias[i + 1]
-        change = prev_grad - next_grad
-        if change > last_best:
-            last_best = change
-            best_index = i
-    print("Optimal k = " + str(best_index+1))
-
-    #Return optimal K and the labels belonging to that K
-    return np.asarray(clusters[best_index]), best_index+1
-
-def pca(points: np.ndarray, k_labels: np.ndarray, k: int):
-    #Lists to store components
-    center = []
-    pc1 = []
-    pc2 = []
-    pc3 = []
-    variance = []
-    #Run PCA on each cluster
-    print("Running PCA Feature Extraction")
-    for i in range(k):
-        #Find clusters 
-        cluster_points = points[k_labels == i]
-        pca = PCA(n_components=3)
-        pca.fit(cluster_points)
-        center.append(pca.mean_)
-        pc1.append(pca.components_[0])
-        pc2.append(pca.components_[1])
-        pc3.append(pca.components_[2])
-        variance.append(pca.explained_variance_)
-    return np.asarray(center), np.asarray(pc1), np.asarray(pc2), np.asarray(pc3), np.asarray(variance)
-
-def truth(opt_k: int, gt_labels: np.ndarray, k_labels: np.ndarray) -> np.ndarray:
+def truth(num_clusters: int, gt_labels: np.ndarray, k_labels: np.ndarray) -> np.ndarray:
     gt = []
-    for i in range(opt_k):
+    for i in range(num_clusters):
         cluster_labels = gt_labels[k_labels == i] #Get a list of every ground truth label in that cluster
         gt.append(np.bincount(cluster_labels).argmax()) #Use the most common ground truth as the ground truth for that cluster
     return np.asarray(gt)
-
-def make_feature(center, pc1, pc2, pc3):
-    features_list = [center, pc1, pc2, pc3]
-    x = np.hstack(features_list)
-    return x
 
 def svm(gt: np.ndarray, X: np.ndarray, k_labels: np.ndarray):
     scaler = StandardScaler()
