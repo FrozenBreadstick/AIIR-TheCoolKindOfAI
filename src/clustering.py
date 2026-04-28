@@ -109,7 +109,7 @@ def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.n
         print("No Existing Save")
         henry = hdbscan.HDBSCAN(
             min_cluster_size=50,
-            min_samples=40,
+            min_samples=30,
             cluster_selection_epsilon=10,
             core_dist_n_jobs=-1
         )
@@ -180,7 +180,7 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Point Cloud Segmentation pipeline (K-Means -> PCA -> SVM)")
-    parser.add_argument("path", nargs="?", default="pointclouds/2/Denoise_NoVeg_Subsampled.laz")
+    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
     parser.add_argument("-k", "--clusters", type=int, default=15, help="Number of k-means clusters (default: 20)")
     args = parser.parse_args()
 
