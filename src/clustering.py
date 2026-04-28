@@ -109,7 +109,8 @@ def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.n
         print("No Existing Save")
         henry = hdbscan.HDBSCAN(
             min_cluster_size=50,
-            min_samples=60,
+            min_samples=40,
+            cluster_selection_epsilon=10,
             core_dist_n_jobs=-1
         )
         cluster_labels = henry.fit_predict(b_points[:, :2])
@@ -119,7 +120,7 @@ def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.n
     print("Clustering Complete in:", end - start, "seconds")
     return labels
 
-# Need to switch to training on 80% testing on 20% or some other split
+# Need to switch to training on 80%, testing on 20% or some other split
 def FelicityRandomForest(points: np.ndarray, gts: np.ndarray, filename: str) -> np.ndarray:
     print("Starting Forest Classification")
     felicity = None
@@ -179,12 +180,13 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Point Cloud Segmentation pipeline (K-Means -> PCA -> SVM)")
-    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
+    parser.add_argument("path", nargs="?", default="pointclouds/2/Denoise_NoVeg_Subsampled.laz")
     parser.add_argument("-k", "--clusters", type=int, default=15, help="Number of k-means clusters (default: 20)")
     args = parser.parse_args()
 
     # Load Data
-    filename = args.path.rsplit('/', 1)[-1]
+    pat = args.path.rsplit('/', 1)
+    filename = pat[-2] + "_" + pat[-1]
     filename = filename.replace(".laz", "") # Fix filepath
     points, original_gt_labels = load_laz(args.path, filename)
 
