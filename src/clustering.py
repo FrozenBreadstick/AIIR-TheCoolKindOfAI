@@ -27,10 +27,14 @@ def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]
         clarissa = np.vectorize(stanley.get)(lazarus.classification)
         print(np.unique(clarissa))
         percicus = np.vstack((lazarus.x, lazarus.y, lazarus.z)).T
+        min_corner = percicus.min(axis=0)
+        max_corner = percicus.max(axis=0)
         np.savez(
             filename + "_ground_truth.npz",
             points = percicus,
-            gt = clarissa
+            gt = clarissa,
+            min = min_corner,
+            max = max_corner
         )
     print(f"Loaded {len(percicus)} points from {path}")
     return percicus, clarissa
@@ -69,7 +73,7 @@ def visualize(filename: str) -> None:
     centroids = centroid_data["centroids"]
     metrics = centroid_data["metrics"]
     centroids3 = np.hstack([centroids, np.full((len(centroids), 1), 90.0)])
-    centers = ps.register_point_cloud("Cluster Centers", centroids3, radius=0.005)
+    centers = ps.register_point_cloud("Cluster Centers", centroids3, radius=0.005, enabled=False)
     all_nodes = []
     all_edges = []
     offset = 0
@@ -92,7 +96,7 @@ def visualize(filename: str) -> None:
     all_nodes = np.vstack(all_nodes)
     all_edges = np.vstack(all_edges)
 
-    ps.register_curve_network("Building Boundaries", all_nodes, all_edges, radius=0.0015, color=[255,0,0])
+    ps.register_curve_network("Building Boundaries", all_nodes, all_edges, radius=0.0015, color=[255,0,0], enabled=False)
     ps.show()
 
 # DBSCAN clusterer
