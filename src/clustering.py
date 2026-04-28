@@ -149,11 +149,16 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
     print("Starting Centroid & Bounds Calculations")
     centroids = []
     metrics = []
+    minimum = None
+    maximum = None
     if os.path.exists(filename + "_centroid.npz"):
         print("Existing Save Data Exists, Loading...")
         cedric = np.load(filename + "_centroid.npz")
         centroids = cedric["centroids"]
         metrics = cedric["metrics"]
+        data = np.load(filename + "_ground_truth.npz")
+        minimum = data["min"]
+        maximum = data["max"]
     else:
         print("No Existing Save")
 
@@ -172,11 +177,15 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
 
             centroids.append(centroid)
             metrics.append(np.array([north[:2], east[:2], south[:2], west[:2]]))
-
+        data = np.load(filename + "_ground_truth.npz")
+        minimum = data["min"]
+        maximum = data["max"]
         np.savez(
             filename + "_centroid.npz",
             centroids=np.array(centroids),
-            metrics=np.array(metrics)
+            metrics=np.array(metrics),
+            min = minimum,
+            max = maximum
         )
 
     print("Centroids and Bounds Found")
