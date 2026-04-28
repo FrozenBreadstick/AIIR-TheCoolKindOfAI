@@ -1,7 +1,7 @@
 # AIIR-TheCoolKindOfAI
 
 /pointclouds contains raw .laz LiDAR scans from Spatial NSW.
-    - Each sub folder contains the metadata pertaining to the original scan, the original scan, and a file named "denoised" that has had all scalar layers stripped (using CloudCompare FOSS) except for layer 2 (Ground), 5 (Vegetation, disregarded when loaded), and 6 (Buildings). Denoised files may also be cropped to a smaller area.
+    - Each sub folder contains the metadata pertaining to the original scan, the original scan, and a file named "denoised_npveg_subsampled" which removes random lidar noise included in the file, strips all points except for buildings and ground, and subsamples the points to 10% of the original model (~3mil points -> 300k)
 
 /src contains the code for each step of the process
     - clustering.py -> Reads in a specified Denoised LAZ file from the pointclouds folder and trains a clasifier to identify ground vs buildings. Then it takes the output from the classifier and constructs box shaped obstacles whose size and position is passed to environment.py
