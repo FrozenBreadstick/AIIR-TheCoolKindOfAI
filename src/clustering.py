@@ -4,23 +4,11 @@ import os
 import time
 
 import numpy as np
-import open3d as o3d
 import polyscope as ps
 import laspy
 
 import hdbscan #for db scan, allows streaming of points so we dont run out of memory
 from sklearn.ensemble import RandomForestClassifier
-
-# Additionally, you may want to use StandardScaler for height normalisation before clustering
-from sklearn.preprocessing import StandardScaler
-
-# Libraries for Profiling and testing
-from sklearn.model_selection import cross_val_predict
-from sklearn.metrics import classification_report
-
-# Then run SVC or RandomForestClassifier on the data to seperate floor from obstacles (Classify on a per point basis, this is why we downsample)
-# Run DBSCAN to group obstacles points together and find ceontroids and identify bounding boxes for environment creation
-# Actually, scratch that, we can run DBSCAN first because of the nature of the lidar DATA being top down allowing for seperable clusters to be formed
 
 # We are using Laz cus it is more storage space efficient. Laz v1.4 (Point Format 0)
 def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
@@ -76,35 +64,39 @@ def visualize(filename: str) -> None:
     cluster_labels = np.load(filename + "_cluster_labels.npy")
     cloud.add_scalar_quantity("Clusters", cluster_labels, enabled=False)
 
+    #Centroids & Bounds
+    centroid_data = np.load(filename + "_centroid.npz")
+    centroids = centroid_data["centroids"]
+    metrics = centroid_data["metrics"]
+    centroids3 = np.hstack([centroids, np.full((len(centroids), 1), 90.0)])
+    centers = ps.register_point_cloud("Cluster Centers", centroids3, radius=0.005)
+    all_nodes = []
+    all_edges = []
+    offset = 0
 
+    #connect each set of points
+    edges = np.array([
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 0]
+    ])
 
+    for m in metrics:
+        #m is stored as [north, east, south, west]
+        quad = np.array(m)
+        quad3 = np.hstack([quad, np.full((4, 1), 90.0)])
+        all_nodes.append(quad3)
+        all_edges.append(edges + offset)
+        offset += 4
+    all_nodes = np.vstack(all_nodes)
+    all_edges = np.vstack(all_edges)
+
+    ps.register_curve_network("Building Boundaries", all_nodes, all_edges, radius=0.0015, color=[255,0,0])
     ps.show()
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Point Cloud Segmentation pipeline (K-Means -> PCA -> SVM)")
-    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
-    parser.add_argument("-k", "--clusters", type=int, default=15, help="Number of k-means clusters (default: 20)")
-    args = parser.parse_args()
-
-    # Load Data
-    filename = args.path.rsplit('/', 1)[-1]
-    filename = filename.replace(".laz", "")
-    points, original_gt_labels = load_laz(args.path, filename)
-
-    # Classify with RandomForest on a point by point basis
-    predict_gt_labels = FelicityRandomForest(points, original_gt_labels, filename)
-
-    # DBSCAN Cluster
-    cluster_labels = DavidBentleyScan(points, predict_gt_labels, filename)
-    visualize(filename)
-    return
-    # Classification
-    ### svm after make features
-
-def DavidBentleyScan(points, gts, filename):
+# DBSCAN clusterer
+def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.ndarray:
     print("Starting Clustering")
     print("Stripping Ground for XY Clustering")
     start = time.time()
@@ -127,7 +119,8 @@ def DavidBentleyScan(points, gts, filename):
     print("Clustering Complete in:", end - start, "seconds")
     return labels
 
-def FelicityRandomForest(points, gts, filename):
+# Need to switch to training on 80% testing on 20% or some other split
+def FelicityRandomForest(points: np.ndarray, gts: np.ndarray, filename: str) -> np.ndarray:
     print("Starting Forest Classification")
     felicity = None
     start = time.time()
@@ -146,6 +139,65 @@ def FelicityRandomForest(points, gts, filename):
     end = time.time()
     print("Classifying Complete in: " + str(end-start) + " seconds")
     return felicity
+
+def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str) -> Tuple[np.ndarray, np.ndarray]:
+    print("Starting Centroid & Bounds Calculations")
+    centroids = []
+    metrics = []
+    if os.path.exists(filename + "_centroid.npz"):
+        print("Existing Save Data Exists, Loading...")
+        cedric = np.load(filename + "_centroid.npz")
+        centroids = cedric["centroids"]
+        metrics = cedric["metrics"]
+    else:
+        print("No Existing Save")
+
+        for i in np.unique(cluster_labels):
+            if i == -1:
+                continue
+            cluster_points = points[cluster_labels == i]
+            centroid = np.mean(cluster_points[:, :2], axis=0)
+            pts = cluster_points[:, :2]
+
+            #cardinal extreme points, general shape representing building
+            north = cluster_points[np.argmax(pts[:, 1])]
+            south = cluster_points[np.argmin(pts[:, 1])]
+            east  = cluster_points[np.argmax(pts[:, 0])]
+            west  = cluster_points[np.argmin(pts[:, 0])]
+
+            centroids.append(centroid)
+            metrics.append(np.array([north[:2], east[:2], south[:2], west[:2]]))
+
+        np.savez(
+            filename + "_centroid.npz",
+            centroids=np.array(centroids),
+            metrics=np.array(metrics)
+        )
+
+    print("Centroids and Bounds Found")
+    return np.array(centroids), np.array(metrics)
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Point Cloud Segmentation pipeline (K-Means -> PCA -> SVM)")
+    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
+    parser.add_argument("-k", "--clusters", type=int, default=15, help="Number of k-means clusters (default: 20)")
+    args = parser.parse_args()
+
+    # Load Data
+    filename = args.path.rsplit('/', 1)[-1]
+    filename = filename.replace(".laz", "") # Fix filepath
+    points, original_gt_labels = load_laz(args.path, filename)
+
+    # Classify with RandomForest on a point by point basis
+    predict_gt_labels = FelicityRandomForest(points, original_gt_labels, filename)
+
+    # DBSCAN Cluster
+    cluster_labels = DavidBentleyScan(points, predict_gt_labels, filename)
+
+    #Find Centroids and Bounds
+    CedricCentroid(points, cluster_labels, filename)
+    visualize(filename)
+    return
 
 if __name__ == "__main__":
     main()
