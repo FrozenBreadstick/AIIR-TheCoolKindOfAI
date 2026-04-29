@@ -1,11 +1,11 @@
 import pybullet as p
 
 class Building:
-    def __init__(self, client, base_position):
+    def __init__(self, client, ):
         self.client = client
         # Create a red cylinder (Radius 0.5, Height 1.0)
-        col_shape_id = client.createCollisionShape(shapeType=client.GEOM_CYLINDER, radius=0.5, height=1.0)
-        vis_shape_id = client.createVisualShape(shapeType=client.GEOM_CYLINDER, radius=0.5, length=1.0, rgbaColor=[1, 0, 0, 1]) # Red
+        col_shape_id = client.createCollisionShape(shapeType=client.GEOM_MESH)
+        vis_shape_id = client.createVisualShape(shapeType=client.GEOM_MESH, rgbaColor=[1, 0, 0, 1]) # Red
         
         self.obstacle = client.createMultiBody(
             baseMass=0, # Infinite mass, completely static
