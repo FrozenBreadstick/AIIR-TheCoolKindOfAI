@@ -5,11 +5,11 @@ import numpy as np
 
 
 class Car:
-    def __init__(self, client):
+    def __init__(self, client, base_position=[0, 0, 0.1]):
         self.client = client
         f_name = os.path.join(os.path.dirname(__file__), 'simplecar.urdf')
         self.car = self.client.loadURDF(fileName=f_name,
-                              basePosition=[0, 0, 0.1])
+                              basePosition=base_position)
 
         # Joint indices as found by p.getJointInfo()
         self.steering_joints = [0, 2]
