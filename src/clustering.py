@@ -27,10 +27,14 @@ def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]
         clarissa = np.vectorize(stanley.get)(lazarus.classification)
         print(np.unique(clarissa))
         percicus = np.vstack((lazarus.x, lazarus.y, lazarus.z)).T
+        min_corner = percicus.min(axis=0)
+        max_corner = percicus.max(axis=0)
         np.savez(
             filename + "_ground_truth.npz",
             points = percicus,
-            gt = clarissa
+            gt = clarissa,
+            min = min_corner,
+            max = max_corner
         )
     print(f"Loaded {len(percicus)} points from {path}")
     return percicus, clarissa
@@ -69,7 +73,7 @@ def visualize(filename: str) -> None:
     centroids = centroid_data["centroids"]
     metrics = centroid_data["metrics"]
     centroids3 = np.hstack([centroids, np.full((len(centroids), 1), 90.0)])
-    centers = ps.register_point_cloud("Cluster Centers", centroids3, radius=0.005)
+    centers = ps.register_point_cloud("Cluster Centers", centroids3, radius=0.005, enabled=False)
     all_nodes = []
     all_edges = []
     offset = 0
@@ -92,7 +96,7 @@ def visualize(filename: str) -> None:
     all_nodes = np.vstack(all_nodes)
     all_edges = np.vstack(all_edges)
 
-    ps.register_curve_network("Building Boundaries", all_nodes, all_edges, radius=0.0015, color=[255,0,0])
+    ps.register_curve_network("Building Boundaries", all_nodes, all_edges, radius=0.0015, color=[255,0,0], enabled=False)
     ps.show()
 
 # DBSCAN clusterer
@@ -109,7 +113,7 @@ def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.n
         print("No Existing Save")
         henry = hdbscan.HDBSCAN(
             min_cluster_size=50,
-            min_samples=40,
+            min_samples=30,
             cluster_selection_epsilon=10,
             core_dist_n_jobs=-1
         )
@@ -145,11 +149,16 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
     print("Starting Centroid & Bounds Calculations")
     centroids = []
     metrics = []
+    minimum = None
+    maximum = None
     if os.path.exists(filename + "_centroid.npz"):
         print("Existing Save Data Exists, Loading...")
         cedric = np.load(filename + "_centroid.npz")
         centroids = cedric["centroids"]
         metrics = cedric["metrics"]
+        data = np.load(filename + "_ground_truth.npz")
+        minimum = data["min"]
+        maximum = data["max"]
     else:
         print("No Existing Save")
 
@@ -168,11 +177,15 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
 
             centroids.append(centroid)
             metrics.append(np.array([north[:2], east[:2], south[:2], west[:2]]))
-
+        data = np.load(filename + "_ground_truth.npz")
+        minimum = data["min"]
+        maximum = data["max"]
         np.savez(
             filename + "_centroid.npz",
             centroids=np.array(centroids),
-            metrics=np.array(metrics)
+            metrics=np.array(metrics),
+            min = minimum,
+            max = maximum
         )
 
     print("Centroids and Bounds Found")
@@ -180,7 +193,7 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Point Cloud Segmentation pipeline (K-Means -> PCA -> SVM)")
-    parser.add_argument("path", nargs="?", default="pointclouds/2/Denoise_NoVeg_Subsampled.laz")
+    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
     parser.add_argument("-k", "--clusters", type=int, default=15, help="Number of k-means clusters (default: 20)")
     args = parser.parse_args()
 
