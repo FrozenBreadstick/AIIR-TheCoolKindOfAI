@@ -22,7 +22,8 @@ class SimpleDrivingEnv(gym.Env):
         renders=False, 
         minimum_safe_distance=1.0,
         reward_callback=None,
-        observation_callback=None
+        observation_callback=None,
+        environment_map=None
     ):
         if (isDiscrete):
             self.action_space = gym.spaces.Discrete(9)
@@ -58,6 +59,9 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal = None
         self.rendered_img = None
         self.render_rot_matrix = None
+        self.building_array = [] # list to keep track of building objects for resetting and cleanup
+        self.environment_map = environment_map
+        self.end_zone_buffer = 10
         
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -146,21 +150,89 @@ class SimpleDrivingEnv(gym.Env):
         self._p.setGravity(0, 0, -10)
         # Reload the plane and car
         Plane(self._p)
-        self.car = Car(self._p)
         self._envStepCounter = 0
 
-        # Set the goal to a random target
-        x = (self.np_random.uniform(5, 9) if self.np_random.integers(2) else
-             self.np_random.uniform(-9, -5))
-        y = (self.np_random.uniform(5, 9) if self.np_random.integers(2) else
-             self.np_random.uniform(-9, -5))
+        # Clear any existing buildings
+        for building in self.building_array:
+            self._p.removeBody(building)
+        self.building_array = []
+
+        # select which zone of buildings to spawn based on environment_map parameter
+        map_data = np.load(self.environment_map)
+
+        obstacle_boundaries = map_data['metrics']
+        obstacle_centres = map_data['centroids']
+        map_corners = [map_data['min'], map_data['max']]
+
+        #process buildings
+        # for i in range(len(obstacle_boundaries)):
+        #     self.make_custom_obstacles(obstacle_boundaries[i])
+
+        #select random x_y position for submap corner 1
+        map_width_comp = (map_corners[1][0] - map_corners[0][0]) / 2
+        map_height_comp = (map_corners[1][1] - map_corners[0][1]) / 2
+
+        # Set the goal to a random target within the map boundaries
+        random_x = self.np_random.uniform(map_corners[0][0], map_corners[0][0] + map_width_comp)
+        random_y = self.np_random.uniform(map_corners[0][1], map_corners[0][1] + map_height_comp)
+
+        # filter buildings to only those within the selected submap
+        for i in range(len(obstacle_boundaries)):
+            building_center = obstacle_centres[i]
+            if (building_center[0] >= random_x and building_center[0] <= random_x + map_width_comp and
+                building_center[1] >= random_y and building_center[1] <= random_y + map_height_comp):
+                self.make_custom_obstacles(obstacle_boundaries[i]) # spawn building if its centroid is within the selected submap
+
+        # make boudary wall points with a little sticking out at the ends for the goals
+        boundary_vertices = [
+            (random_x - self.end_zone_buffer, random_y, 0),
+            (random_x - self.end_zone_buffer, random_y, 2),
+            (random_x + map_width_comp + self.end_zone_buffer, random_y, 0),
+            (random_x + map_width_comp + self.end_zone_buffer, random_y, 2),
+            (random_x + map_width_comp + self.end_zone_buffer, random_y + map_height_comp, 0),
+            (random_x + map_width_comp + self.end_zone_buffer, random_y + map_height_comp, 2),
+            (random_x - self.end_zone_buffer, random_y + map_height_comp, 0),
+            (random_x - self.end_zone_buffer, random_y + map_height_comp, 2)
+        ]
+
+        boundary_indices = [
+            [0, 1, 2],
+            [1, 2, 3],
+            [2, 3, 4],
+            [3, 4, 5],
+            [4, 5, 6],
+            [5, 6, 7],
+            [6, 7, 0],
+            [7, 0, 1]
+        ]
+
+        # create collision and visual shapes for the boundary walls
+        col_shape_id = self._p.createCollisionShape(shapeType=self._p.GEOM_MESH, vertices=boundary_vertices, indices=boundary_indices)
+        vis_shape_id = self._p.createVisualShape(shapeType=self._p.GEOM_MESH, vertices=boundary_vertices, indices=boundary_indices, rgbaColor=[1, 0, 0, 1]) # Red color
+
+        # create the multi body for the custom obstacle
+        obstacle_object = self._p.createMultiBody(
+            baseMass=0, # Infinite mass, completely static
+            baseCollisionShapeIndex=col_shape_id,
+            baseVisualShapeIndex=vis_shape_id,
+            basePosition=[0, 0, 0] # position is irrelevant since vertices are in world coordinates
+        )
+
+        # Set the goal to end in the opposite side of the map from the car's starting position
+        x = (random_x + map_width_comp + (self.end_zone_buffer / 2))
+        y = (random_y + (map_height_comp / 2))
         self.goal = (x, y)
         self.done = False
         self.reached_goal = False
 
         # Visual element of the goal
         self.goal_object = Goal(self._p, self.goal)
-        
+
+        # set car position to be in the opposite mid point from the goal
+        car_x = (random_x - (self.end_zone_buffer / 2))
+        car_y = (random_y + (map_height_comp / 2))
+        self.car = Car(self._p, base_position=[car_x, car_y, 0.1])
+
         # Obstacle logic
         scenario = options.get("scenario", "random") if options else "random"
         if scenario == "none":
@@ -285,3 +357,36 @@ class SimpleDrivingEnv(gym.Env):
 
     def close(self):
         self._p.disconnect()
+
+    def make_custom_obstacles(self, obstacle_vertices):
+
+        # change the vertices shape from list of 4 (x,y) to list of 8 (x,y,z) for pybullet
+        obstacle_vertices_3d = []
+        for vertex in obstacle_vertices:
+            obstacle_vertices_3d.append((vertex[0], vertex[1], 0.0)) # add z=0 for all vertices on the ground plane
+            obstacle_vertices_3d.append((vertex[0], vertex[1], 1.0)) # add z=1 for all vertices to make it a vertical wall
+
+        # make a index list for the mesh (2 triangles per quad) 
+        indices = []
+        indices.append([0, 1, 2])
+        indices.append([1, 2, 3])
+        indices.append([2, 3, 4])
+        indices.append([3, 4, 5])
+        indices.append([4, 5, 6])
+        indices.append([5, 6, 7])
+        indices.append([6, 7, 0])
+        indices.append([7, 0, 1])   # mannually because im too lazy to write a loop for this. and dont need top or bottom
+
+        # create collision and visual shapes for the custom obstacles
+        col_shape_id = self._p.createCollisionShape(shapeType=self._p.GEOM_MESH, vertices=obstacle_vertices_3d, indices=indices)
+        vis_shape_id = self._p.createVisualShape(shapeType=self._p.GEOM_MESH, vertices=obstacle_vertices_3d, indices=indices, rgbaColor=[1, 0, 0, 1]) # Red color
+
+        # create the multi body for the custom obstacle
+        obstacle_object = self._p.createMultiBody(
+            baseMass=0, # Infinite mass, completely static
+            baseCollisionShapeIndex=col_shape_id,
+            baseVisualShapeIndex=vis_shape_id,
+            basePosition=[0, 0, 0] # position is irrelevant since vertices are in world coordinates
+        )
+
+        self.building_array.append(obstacle_object)
