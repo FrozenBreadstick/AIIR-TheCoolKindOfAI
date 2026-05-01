@@ -62,7 +62,8 @@ class SimpleDrivingEnv(gym.Env):
         self.building_array = [] # list to keep track of building objects for resetting and cleanup
         self.environment_map = environment_map
         self.end_zone_buffer = 10
-        
+        self.plane = None
+
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
         
@@ -91,12 +92,10 @@ class SimpleDrivingEnv(gym.Env):
           goal_pos, goal_orn = self._p.getBasePositionAndOrientation(self.goal_object.goal)
           car_ob = self.getExtendedObservation()
 
-          # Distance to obstacle inside simulation steps
-          if self.has_obstacle:
-              dist_to_obs = math.sqrt((car_pos[0] - self.obstacle_pos[0])**2 + (car_pos[1] - self.obstacle_pos[1])**2)
-              if dist_to_obs < self.minimum_safe_distance:
-                  self.done = True
-                  break
+          # check collisions with the car to enforce termination for unsafe driving (e.g. going offroad or hitting buildings)
+          if(self.collision_detect()):
+              self.done = True
+              break
 
           if self._termination():
             self.done = True
@@ -110,10 +109,10 @@ class SimpleDrivingEnv(gym.Env):
                                   (car_pos[1] - goal_pos[1]) ** 2))
                                   
         # Check termination constraints so students can't cheat the physics
-        if self.has_obstacle:
-            dist_to_obs = math.sqrt((car_pos[0] - self.obstacle_pos[0])**2 + (car_pos[1] - self.obstacle_pos[1])**2)
-            if dist_to_obs < self.minimum_safe_distance:
-                self.done = True
+        # if self.has_obstacle:
+        #     dist_to_obs = math.sqrt((car_pos[0] - self.obstacle_pos[0])**2 + (car_pos[1] - self.obstacle_pos[1])**2)
+        #     if dist_to_obs < self.minimum_safe_distance:
+        #         self.done = True
                 
         if dist_to_goal < 1.5 and not self.reached_goal:
             self.done = True
@@ -149,12 +148,11 @@ class SimpleDrivingEnv(gym.Env):
         self._p.setTimeStep(self._timeStep)
         self._p.setGravity(0, 0, -10)
         # Reload the plane and car
-        Plane(self._p)
+        self.plane = Plane(self._p)
         self._envStepCounter = 0
+        
 
         # Clear any existing buildings
-        for building in self.building_array:
-            self._p.removeBody(building)
         self.building_array = []
 
         # select which zone of buildings to spawn based on environment_map parameter
@@ -181,7 +179,7 @@ class SimpleDrivingEnv(gym.Env):
             building_center = obstacle_centres[i]
             if (building_center[0] >= random_x and building_center[0] <= random_x + map_width_comp and
                 building_center[1] >= random_y and building_center[1] <= random_y + map_height_comp):
-                self.make_custom_obstacles(obstacle_boundaries[i]) # spawn building if its centroid is within the selected submap
+                self.make_custom_obstacles(obstacle_boundaries[i], random_x, random_y) # spawn building if its centroid is within the selected submap
 
         # make boudary wall points with a little sticking out at the ends for the goals
         boundary_vertices = [
@@ -217,7 +215,7 @@ class SimpleDrivingEnv(gym.Env):
             baseMass=0, # Infinite mass, completely static
             baseCollisionShapeIndex=col_shape_id,
             baseVisualShapeIndex=vis_shape_id,
-            basePosition=[0, 0, 0] # position is irrelevant since vertices are in world coordinates
+            basePosition=[-random_x, -random_y, 0] # position is irrelevant since vertices are in world coordinates
         )
 
         # Set the goal to end in the opposite side of the map from the car's starting position
@@ -231,43 +229,43 @@ class SimpleDrivingEnv(gym.Env):
         self.goal_object = Goal(self._p, self.goal)
 
         # set car position to be in the opposite mid point from the goal
-        car_x = (random_x - (self.end_zone_buffer / 2))
-        car_y = (random_y + (map_height_comp / 2))
-        self.car = Car(self._p, base_position=[car_x, car_y, 0.1])
+        car_x = (-(self.end_zone_buffer / 2))
+        car_y = ((map_height_comp / 2))
+        self.car = Car(self._p, base_position=[car_x, car_y, 0.5])
 
         # Obstacle logic
-        scenario = options.get("scenario", "random") if options else "random"
-        if scenario == "none":
-            self.has_obstacle = False
-        elif scenario == "midpoint":
-            self.has_obstacle = True
-            force_midpoint = True
-        elif scenario == "random_pos":
-            self.has_obstacle = True
-            force_midpoint = False
-        else: # random
-            self.has_obstacle = self.np_random.random() < 0.60
-            force_midpoint = self.np_random.random() < 0.5
+        # scenario = options.get("scenario", "random") if options else "random"
+        # if scenario == "none":
+        #     self.has_obstacle = False
+        # elif scenario == "midpoint":
+        #     self.has_obstacle = True
+        #     force_midpoint = True
+        # elif scenario == "random_pos":
+        #     self.has_obstacle = True
+        #     force_midpoint = False
+        # else: # random
+        #     self.has_obstacle = self.np_random.random() < 0.60
+        #     force_midpoint = self.np_random.random() < 0.5
             
-        if self.has_obstacle:
-            if force_midpoint:
-                # Midpoint
-                obs_x = self.goal[0] / 2.0
-                obs_y = self.goal[1] / 2.0
-            else:
-                # Random position with min distance 1.5 from origin and goal
-                while True:
-                    obs_x = self.np_random.uniform(-9, 9)
-                    obs_y = self.np_random.uniform(-9, 9)
-                    dist_to_origin = math.sqrt(obs_x**2 + obs_y**2)
-                    dist_to_goal_pt = math.sqrt((obs_x - self.goal[0])**2 + (obs_y - self.goal[1])**2)
-                    if dist_to_origin > 1.5 and dist_to_goal_pt > 1.5:
-                        break
-            self.obstacle_pos = (obs_x, obs_y)
-            self.obstacle_object = Obstacle(self._p, self.obstacle_pos)
-        else:
-            self.obstacle_pos = None
-            self.obstacle_object = None
+        # if self.has_obstacle:
+        #     if force_midpoint:
+        #         # Midpoint
+        #         obs_x = self.goal[0] / 2.0
+        #         obs_y = self.goal[1] / 2.0
+        #     else:
+        #         # Random position with min distance 1.5 from origin and goal
+        #         while True:
+        #             obs_x = self.np_random.uniform(-9, 9)
+        #             obs_y = self.np_random.uniform(-9, 9)
+        #             dist_to_origin = math.sqrt(obs_x**2 + obs_y**2)
+        #             dist_to_goal_pt = math.sqrt((obs_x - self.goal[0])**2 + (obs_y - self.goal[1])**2)
+        #             if dist_to_origin > 1.5 and dist_to_goal_pt > 1.5:
+        #                 break
+        #     self.obstacle_pos = (obs_x, obs_y)
+        #     self.obstacle_object = Obstacle(self._p, self.obstacle_pos)
+        # else:
+        #     self.obstacle_pos = None
+        #     self.obstacle_object = None
 
         # Get observation to return
         car_pos = self.car.get_observation()
@@ -275,6 +273,20 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal = math.sqrt(((car_pos[0] - self.goal[0]) ** 2 +
                                            (car_pos[1] - self.goal[1]) ** 2))
         car_ob = self.getExtendedObservation()
+
+        # centre camera on the car for testing
+        car_id = self.car.get_ids()
+        car_pos, _ = self._p.getBasePositionAndOrientation(car_id)
+        # raise camera spawn height
+        camera_pos = [car_pos[0], car_pos[1], 5]
+
+        self._p.resetDebugVisualizerCamera(
+            cameraDistance=8,          # zoom out enough to see car
+            cameraYaw=0,               # rotation around car
+            cameraPitch=-80,           # look slightly down
+            cameraTargetPosition=camera_pos
+        )
+
         return np.array(car_ob, dtype=np.float32), dict()
 
     def render(self, mode='human'):
@@ -321,11 +333,11 @@ class SimpleDrivingEnv(gym.Env):
                                                              aspect=float(RENDER_WIDTH) / RENDER_HEIGHT,
                                                              nearVal=0.1,
                                                              farVal=100.0)
-            (_, _, px, _, _) = self._p.getCameraImage(width=RENDER_WIDTH,
-                                                      height=RENDER_HEIGHT,
-                                                      viewMatrix=view_matrix,
-                                                      projectionMatrix=proj_matrix,
-                                                      renderer=p.ER_BULLET_HARDWARE_OPENGL)
+            # (_, _, px, _, _) = self._p.getCameraImage(width=RENDER_WIDTH,
+            #                                           height=RENDER_HEIGHT,
+            #                                           viewMatrix=view_matrix,
+            #                                           projectionMatrix=proj_matrix,
+            #                                           renderer=p.ER_BULLET_HARDWARE_OPENGL)
             frame = np.array(px)
             frame = frame[:, :, :3]
             return frame
@@ -360,7 +372,7 @@ class SimpleDrivingEnv(gym.Env):
     def close(self):
         self._p.disconnect()
 
-    def make_custom_obstacles(self, obstacle_vertices):
+    def make_custom_obstacles(self, obstacle_vertices, random_x=0, random_y=0):
 
         # change the vertices shape from list of 4 (x,y) to list of 8 (x,y,z) for pybullet
         obstacle_vertices_3d = []
@@ -395,7 +407,15 @@ class SimpleDrivingEnv(gym.Env):
             baseMass=0, # Infinite mass, completely static
             baseCollisionShapeIndex=col_shape_id,
             baseVisualShapeIndex=vis_shape_id,
-            basePosition=[0, 0, 0] # position is irrelevant since vertices are in world coordinates
+            basePosition=[-random_x, -random_y, 0] # position is irrelevant since vertices are in world coordinates
         )
 
         self.building_array.append(obstacle_object)
+
+
+    # exclusively to stop collisions with the ground plane from being counted as collisions with the environment for termination purposes. Only call this after stepping the simulation and before checking for termination
+    def collision_detect(self):
+        for c in self._p.getContactPoints(bodyA=self.car.car):
+            if c[2] != self.plane.get_ids(): # if the car is colliding with anything other than the ground plane, return True for collision
+                return True
+        return False
