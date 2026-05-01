@@ -205,6 +205,8 @@ class SimpleDrivingEnv(gym.Env):
             [6, 7, 0],
             [7, 0, 1]
         ]
+        boundary_indices = np.array(boundary_indices).astype(np.int32).flatten().tolist()
+        
 
         # create collision and visual shapes for the boundary walls
         col_shape_id = self._p.createCollisionShape(shapeType=self._p.GEOM_MESH, vertices=boundary_vertices, indices=boundary_indices)
@@ -376,6 +378,13 @@ class SimpleDrivingEnv(gym.Env):
         indices.append([5, 6, 7])
         indices.append([6, 7, 0])
         indices.append([7, 0, 1])   # mannually because im too lazy to write a loop for this. and dont need top or bottom
+        indices = np.array(indices).astype(np.int32).flatten().tolist()
+
+        # debugging
+        # print("Vertices shape:", np.array(obstacle_vertices_3d).shape)
+        # print("Indices sample:", np.array(indices)[:10])
+        # print("Indices type:", type(np.array(indices)[0]))    
+
 
         # create collision and visual shapes for the custom obstacles
         col_shape_id = self._p.createCollisionShape(shapeType=self._p.GEOM_MESH, vertices=obstacle_vertices_3d, indices=indices)
