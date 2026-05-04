@@ -46,7 +46,7 @@ def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn, obstacle_po
     # HINT: Look up client.invertTransform and client.multiplyTransforms
     # ========================================================
     
-    observation = [0.0, 0.0, 0.0, 0.0, 0.0] # Dummy return, replace this
+    observation = [0.0, 0.0] # Dummy return, replace this
     
     #invert car transform
     inv_car_pos, inv_car_orn = client.invertTransform(car_pos, car_orn) 
@@ -63,9 +63,9 @@ def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn, obstacle_po
     # fill in observation array
     observation[0] = rel_goal_pos[0] # relative x position of the goal
     observation[1] = rel_goal_pos[1] # relative y position of the goal
-    observation[2] = rel_obstacle_pos[0] # relative x position of the obstacle (or 0 if no obstacle)
-    observation[3] = rel_obstacle_pos[1] # relative y position of the obstacle (or 0 if no obstacle)
-    observation[4] = has_obstacle #1.0 if has_obstacle else 0.0 # binary flag indicating
+    # observation[2] = rel_obstacle_pos[0] # relative x position of the obstacle (or 0 if no obstacle)
+    # observation[3] = rel_obstacle_pos[1] # relative y position of the obstacle (or 0 if no obstacle)
+    # observation[4] = has_obstacle #1.0 if has_obstacle else 0.0 # binary flag indicating
 
     #lidar_readings = lidar_readings[::10]     # 360 → 36
     #lidar_readings = lidar_readings.reshape(36, 10).mean(axis=1) # optional: downsample by averaging every 10 readings into 36 total readings
@@ -141,7 +141,8 @@ if __name__ == "__main__":
         "renders": False, 
         "isDiscrete": False,
         "reward_callback": custom_reward,          
-        "observation_callback": custom_observation 
+        "observation_callback": custom_observation,
+        "environment_map": r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz"
     }
     env = make_vec_env(
         "SimpleDriving-v0", 
