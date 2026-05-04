@@ -32,9 +32,9 @@ class SimpleDrivingEnv(gym.Env):
                 low=np.array([-1, -.6], dtype=np.float32),
                 high=np.array([1, .6], dtype=np.float32))
         self.observation_space = gym.spaces.box.Box(
-            low=np.array([-40, -40, -40, -40, 0] + [0]*36, dtype=np.float32),
-            high=np.array([40, 40, 40, 40, 1] + [1]*36, dtype=np.float32),
-            shape=(41,),
+            low=np.array([-40, -40] + [0]*36, dtype=np.float32),
+            high=np.array([40, 40] + [1]*36, dtype=np.float32),
+            shape=(38,),
             dtype=np.float32)
         self.np_random, _ = gym.utils.seeding.np_random()
 
