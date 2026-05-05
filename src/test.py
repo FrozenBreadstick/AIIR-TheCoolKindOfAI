@@ -17,7 +17,7 @@ def test_policy():
     #model = PPO.load("model/ppo_simple_driving_model")
 
     print("Loading environment with rendering enabled...")
-    env = gym.make("SimpleDriving-v0", renders=True, isDiscrete=False, reward_callback=custom_reward, observation_callback=custom_observation)
+    env = gym.make("SimpleDriving-v0", renders=True, isDiscrete=False, reward_callback=custom_reward, observation_callback=custom_observation, environment_map=r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz")
     #model.set_env(env)
     model = PPO.load("model/ppo_simple_driving_model", env=env)
 
