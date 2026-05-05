@@ -71,8 +71,8 @@ def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn, obstacle_po
     #lidar_readings = lidar_readings.reshape(36, 10).mean(axis=1) # optional: downsample by averaging every 10 readings into 36 total readings
     lidar_readings = lidar_readings / np.max(lidar_readings)    # normalize to [0,1]
 
-    if int(time.time()) % 2 == 0:  # every ~2 seconds
-        print("LIDAR min:", np.min(lidar_readings))
+    # if int(time.time()) % 2 == 0:  # every ~2 seconds
+    #     print("LIDAR min:", np.min(lidar_readings))
 
     observation = np.concatenate([observation, lidar_readings])
 
