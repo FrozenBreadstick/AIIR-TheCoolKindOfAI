@@ -32,8 +32,8 @@ class SimpleDrivingEnv(gym.Env):
                 low=np.array([-1, -.6], dtype=np.float32),
                 high=np.array([1, .6], dtype=np.float32))
         self.observation_space = gym.spaces.box.Box(
-            low=np.array([-40, -40] + [0]*36, dtype=np.float32),
-            high=np.array([40, 40] + [1]*36, dtype=np.float32),
+            low=np.array([-1000, -1000] + [0]*36, dtype=np.float32),
+            high=np.array([1000, 1000] + [1]*36, dtype=np.float32),
             shape=(38,),
             dtype=np.float32)
         self.np_random, _ = gym.utils.seeding.np_random()
@@ -287,6 +287,7 @@ class SimpleDrivingEnv(gym.Env):
             cameraTargetPosition=camera_pos
         )
 
+        print("obs at reset:", car_ob) # debug print to check initial observation
         return np.array(car_ob, dtype=np.float32), dict()
 
     def render(self, mode='human'):
