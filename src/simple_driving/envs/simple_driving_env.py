@@ -32,8 +32,8 @@ class SimpleDrivingEnv(gym.Env):
                 low=np.array([-1, -.6], dtype=np.float32),
                 high=np.array([1, .6], dtype=np.float32))
         self.observation_space = gym.spaces.box.Box(
-            low=np.array([-1000, -1000] + [0]*36, dtype=np.float32),
-            high=np.array([1000, 1000] + [1]*36, dtype=np.float32),
+            low=np.array([-2000, -2000] + [0]*36, dtype=np.float32),
+            high=np.array([2000, 2000] + [1]*36, dtype=np.float32),
             shape=(38,),
             dtype=np.float32)
         self.np_random, _ = gym.utils.seeding.np_random()
@@ -219,8 +219,8 @@ class SimpleDrivingEnv(gym.Env):
         )
 
         # Set the goal to end in the opposite side of the map from the car's starting position
-        x = (random_x + map_width_comp + (self.end_zone_buffer / 2))
-        y = (random_y + (map_height_comp / 2))
+        x = (map_width_comp + (self.end_zone_buffer / 2))
+        y = ((map_height_comp / 2))
         self.goal = (x, y)
         self.done = False
         self.reached_goal = False
