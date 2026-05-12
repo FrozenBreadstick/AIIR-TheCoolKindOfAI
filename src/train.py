@@ -38,14 +38,6 @@ def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn, obstacle_po
     Returns:
         list of float: The computed observation state array.
     """
-    # ========================================================
-    # TODO: Calculate the Observation Space for the Neural Network
-    # By default, PyBullet returns global coordinates (X, Y).
-    # You must convert the goal position and obstacle position into 
-    # RELATIVE coordinates (where is the object relative to the car?)
-    # HINT: Look up client.invertTransform and client.multiplyTransforms
-    # ========================================================
-    
     observation = [0.0, 0.0] # Dummy return, replace this
     
     #invert car transform
