@@ -17,8 +17,8 @@ import numpy as np
 OBSTACLE_PENALTY = -50.0
 LIDAR_PENALTY_SCALE = -20.0
 GOAL_REWARD = 1000.0
-STEP_PENALTY = -2.0
-PROGRESS_REWARD_SCALE = 10.0
+STEP_PENALTY = -1.0
+PROGRESS_REWARD_SCALE = 5.0
 MINIMUM_SAFE_DISTANCE = 2.0
 
 def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn, obstacle_pos, has_obstacle, lidar_readings):
@@ -126,19 +126,17 @@ def custom_reward(car_pos, goal_pos, obstacle_pos, has_obstacle, lidar_readings,
     if reached_goal:
         reward += GOAL_REWARD
 
-    # penalty for being too close to the obstacle
-    if has_obstacle:
-        dist_to_obstacle = math.sqrt((car_pos[0] - obstacle_pos[0])**2 + (car_pos[1] - obstacle_pos[1])**2)
-        if dist_to_obstacle < MINIMUM_SAFE_DISTANCE:
-            reward += OBSTACLE_PENALTY * (MINIMUM_SAFE_DISTANCE - dist_to_obstacle / MINIMUM_SAFE_DISTANCE) # more penalty the closer it is
-
-    if np.min(lidar_readings) < 0.2: # if any LiDAR reading is very close to an obstacle
-        reward += LIDAR_PENALTY_SCALE * (0.2 - np.min(lidar_readings)) # more penalty the closer it is
+    # penalty for getting too close to an obstacle
+    if np.min(lidar_readings) < 0.5: # if any LiDAR reading is very close to an obstacle
+        if(np.min(lidar_readings) == 0):
+            reward += OBSTACLE_PENALTY * 2 # if it's basically a collision, give a huge penalty
+        else:
+            reward += LIDAR_PENALTY_SCALE * (1 / np.min(lidar_readings)) # more penalty the closer it is
 
     return reward
 
 # You can change these variables for more training steps or if you have a powerful CPU:
-TOTAL_TIMESTEPS = 750      # define the number of steps used during the training
+TOTAL_TIMESTEPS = 75000      # define the number of steps used during the training
 N_ENVS = 4                   # number of processor core used for multithreading
 
 if __name__ == "__main__":
