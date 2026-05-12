@@ -32,8 +32,8 @@ class SimpleDrivingEnv(gym.Env):
                 low=np.array([-1, -.6], dtype=np.float32),
                 high=np.array([1, .6], dtype=np.float32))
         self.observation_space = gym.spaces.box.Box(
-            low=np.array([-40, -40] + [0]*36, dtype=np.float32),
-            high=np.array([40, 40] + [1]*36, dtype=np.float32),
+            low=np.array([-2000, -2000] + [0]*36, dtype=np.float32),
+            high=np.array([2000, 2000] + [1]*36, dtype=np.float32),
             shape=(38,),
             dtype=np.float32)
         self.np_random, _ = gym.utils.seeding.np_random()
@@ -63,6 +63,9 @@ class SimpleDrivingEnv(gym.Env):
         self.environment_map = environment_map
         self.end_zone_buffer = 10
         self.plane = None
+        self.map_height = 1000
+        self.map_width = 1000
+        self.step_counter = 0
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -136,6 +139,12 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal = dist_to_goal
 
         ob = np.array(car_ob, dtype=np.float32)
+
+        if self.step_counter % 1000 == 0:
+            print("obs at step", self.step_counter, ": ", ob) # debug print to check initial observation
+
+        self.step_counter += 1
+
         return ob, float(reward), self.done, False, dict()
 
     def seed(self, seed=None):
@@ -143,6 +152,7 @@ class SimpleDrivingEnv(gym.Env):
         return [seed]
 
     def reset(self, seed=None, options=None):
+        self.step_counter = 0
         super().reset(seed=seed)
         self._p.resetSimulation()
         self._p.setTimeStep(self._timeStep)
@@ -170,27 +180,39 @@ class SimpleDrivingEnv(gym.Env):
         map_width_comp = (map_corners[1][0] - map_corners[0][0]) / 2
         map_height_comp = (map_corners[1][1] - map_corners[0][1]) / 2
 
+        #print("map height/width comp:", map_height_comp*2, map_width_comp*2)
+
+        if(map_width_comp >= 0):
+            boundary_width = self.map_width
+        else:
+            boundary_width = -self.map_width
+
+        if(map_height_comp >= 0):
+            boundary_height = self.map_height
+        else:
+            boundary_height = -self.map_height
+
         # Set the goal to a random target within the map boundaries
-        random_x = self.np_random.uniform(map_corners[0][0], map_corners[0][0] + map_width_comp)
-        random_y = self.np_random.uniform(map_corners[0][1], map_corners[0][1] + map_height_comp)
+        random_x = self.np_random.uniform(map_corners[0][0], map_corners[0][0] + boundary_width)
+        random_y = self.np_random.uniform(map_corners[0][1], map_corners[0][1] + boundary_height)
 
         # filter buildings to only those within the selected submap
         for i in range(len(obstacle_boundaries)):
             building_center = obstacle_centres[i]
-            if (building_center[0] >= random_x and building_center[0] <= random_x + map_width_comp and
-                building_center[1] >= random_y and building_center[1] <= random_y + map_height_comp):
+            if (building_center[0] >= random_x and building_center[0] <= random_x + boundary_width and
+                building_center[1] >= random_y and building_center[1] <= random_y + boundary_height):
                 self.make_custom_obstacles(obstacle_boundaries[i], random_x, random_y) # spawn building if its centroid is within the selected submap
 
         # make boudary wall points with a little sticking out at the ends for the goals
         boundary_vertices = [
             (random_x - self.end_zone_buffer, random_y, 0),
             (random_x - self.end_zone_buffer, random_y, 2),
-            (random_x + map_width_comp + self.end_zone_buffer, random_y, 0),
-            (random_x + map_width_comp + self.end_zone_buffer, random_y, 2),
-            (random_x + map_width_comp + self.end_zone_buffer, random_y + map_height_comp, 0),
-            (random_x + map_width_comp + self.end_zone_buffer, random_y + map_height_comp, 2),
-            (random_x - self.end_zone_buffer, random_y + map_height_comp, 0),
-            (random_x - self.end_zone_buffer, random_y + map_height_comp, 2)
+            (random_x + boundary_width + self.end_zone_buffer, random_y, 0),
+            (random_x + boundary_width + self.end_zone_buffer, random_y, 2),
+            (random_x + boundary_width + self.end_zone_buffer, random_y + boundary_height, 0),
+            (random_x + boundary_width + self.end_zone_buffer, random_y + boundary_height, 2),
+            (random_x - self.end_zone_buffer, random_y + boundary_height, 0),
+            (random_x - self.end_zone_buffer, random_y + boundary_height, 2)
         ]
 
         boundary_indices = [
@@ -219,8 +241,8 @@ class SimpleDrivingEnv(gym.Env):
         )
 
         # Set the goal to end in the opposite side of the map from the car's starting position
-        x = (random_x + map_width_comp + (self.end_zone_buffer / 2))
-        y = (random_y + (map_height_comp / 2))
+        x = (boundary_width + (self.end_zone_buffer / 2))
+        y = ((boundary_height / 2))
         self.goal = (x, y)
         self.done = False
         self.reached_goal = False
@@ -230,7 +252,7 @@ class SimpleDrivingEnv(gym.Env):
 
         # set car position to be in the opposite mid point from the goal
         car_x = (-(self.end_zone_buffer / 2))
-        car_y = ((map_height_comp / 2))
+        car_y = ((boundary_height / 2))
         self.car = Car(self._p, base_position=[car_x, car_y, 0.5])
 
         # Obstacle logic
