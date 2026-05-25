@@ -63,8 +63,8 @@ class SimpleDrivingEnv(gym.Env):
         self.environment_map = environment_map
         self.end_zone_buffer = 10
         self.plane = None
-        self.map_height = 300
-        self.map_width = 300
+        self.map_height = 250
+        self.map_width = 250
         self.step_counter = 0
 
         # --- Configurable Limits ---
