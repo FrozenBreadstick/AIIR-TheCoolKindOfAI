@@ -63,8 +63,8 @@ class SimpleDrivingEnv(gym.Env):
         self.environment_map = environment_map
         self.end_zone_buffer = 10
         self.plane = None
-        self.map_height = 1000
-        self.map_width = 1000
+        self.map_height = 300
+        self.map_width = 300
         self.step_counter = 0
 
         # --- Configurable Limits ---
@@ -140,8 +140,8 @@ class SimpleDrivingEnv(gym.Env):
 
         ob = np.array(car_ob, dtype=np.float32)
 
-        if self.step_counter % 1000 == 0:
-            print("obs at step", self.step_counter, ": ", ob) # debug print to check initial observation
+        # if self.step_counter % 1000 == 0:
+        #     print("obs at step", self.step_counter, ": ", ob) # debug print to check initial observation
 
         self.step_counter += 1
 

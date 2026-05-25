@@ -23,7 +23,7 @@ class Car:
         self.c_throttle = 100
 
         # *claude* LiDAR parameters
-        self.lidar_range = 10.0  # Maximum range in meters
+        self.lidar_range = 50.0  # Maximum range in meters
         self.num_rays = 36  # Number of laser rays (1-degree resolution)
 
     def get_ids(self):
