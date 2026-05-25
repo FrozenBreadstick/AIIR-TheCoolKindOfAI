@@ -25,7 +25,7 @@ def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn,
                         lidar_readings):
 
    
-#     observation = [0.0, 0.0] # Dummy return, replace this
+    observation = [0.0, 0.0] # Dummy return, replace this
     
 #     #invert car transform
 #     inv_car_pos, inv_car_orn = client.invertTransform(car_pos, car_orn) 
