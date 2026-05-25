@@ -63,6 +63,7 @@ class SimpleDrivingEnv(gym.Env):
         self.environment_map = environment_map
         self.end_zone_buffer = 10
         self.plane = None
+        self.step_count = 0
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -123,8 +124,6 @@ class SimpleDrivingEnv(gym.Env):
              reward = self.reward_callback(
                  car_pos=car_pos, 
                  goal_pos=goal_pos,
-                 obstacle_pos=self.obstacle_pos,
-                 has_obstacle=self.has_obstacle,
                  lidar_readings=self.lidar_readings, # added this for adding the lidar to the callback
                  prev_dist_to_goal=self.prev_dist_to_goal,
                  dist_to_goal=dist_to_goal,
@@ -136,6 +135,10 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal = dist_to_goal
 
         ob = np.array(car_ob, dtype=np.float32)
+
+        if(self.step_count % 300 == 0):
+            print("obs at step ", self.step_count, ":", car_ob[0], car_ob[1]) # debug print to check initial observation
+        
         return ob, float(reward), self.done, False, dict()
 
     def seed(self, seed=None):
@@ -150,6 +153,7 @@ class SimpleDrivingEnv(gym.Env):
         # Reload the plane and car
         self.plane = Plane(self._p)
         self._envStepCounter = 0
+        self.step_count = 0
         
 
         # Clear any existing buildings
@@ -287,7 +291,6 @@ class SimpleDrivingEnv(gym.Env):
             cameraTargetPosition=camera_pos
         )
 
-        print("obs at reset:", car_ob) # debug print to check initial observation
         return np.array(car_ob, dtype=np.float32), dict()
 
     def render(self, mode='human'):
@@ -360,8 +363,6 @@ class SimpleDrivingEnv(gym.Env):
                 car_orn=car_orn,
                 goal_pos=goal_pos,
                 goal_orn=goal_orn,
-                obstacle_pos=self.obstacle_pos,
-                has_obstacle=self.has_obstacle,
                 lidar_readings=self.lidar_readings # added this for adding the lidar to the callback
             )
         else:
