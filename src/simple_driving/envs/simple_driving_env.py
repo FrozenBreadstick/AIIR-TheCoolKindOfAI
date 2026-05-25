@@ -126,8 +126,6 @@ class SimpleDrivingEnv(gym.Env):
              reward = self.reward_callback(
                  car_pos=car_pos, 
                  goal_pos=goal_pos,
-                 obstacle_pos=self.obstacle_pos,
-                 has_obstacle=self.has_obstacle,
                  lidar_readings=self.lidar_readings, # added this for adding the lidar to the callback
                  prev_dist_to_goal=self.prev_dist_to_goal,
                  dist_to_goal=dist_to_goal,
@@ -160,6 +158,7 @@ class SimpleDrivingEnv(gym.Env):
         # Reload the plane and car
         self.plane = Plane(self._p)
         self._envStepCounter = 0
+        self.step_count = 0
         
 
         # Clear any existing buildings
@@ -381,8 +380,6 @@ class SimpleDrivingEnv(gym.Env):
                 car_orn=car_orn,
                 goal_pos=goal_pos,
                 goal_orn=goal_orn,
-                obstacle_pos=self.obstacle_pos,
-                has_obstacle=self.has_obstacle,
                 lidar_readings=self.lidar_readings # added this for adding the lidar to the callback
             )
         else:
