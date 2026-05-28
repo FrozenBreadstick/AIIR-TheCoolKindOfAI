@@ -44,7 +44,7 @@ def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn,
 
 
 def custom_reward(car_pos, goal_pos,
-                  lidar_readings, prev_dist_to_goal, dist_to_goal, reached_goal):
+                  lidar_readings, prev_dist_to_goal, dist_to_goal, reached_goal, collided):
 
     reward = 0.0
 
@@ -59,7 +59,7 @@ def custom_reward(car_pos, goal_pos,
         reward += GOAL_REWARD
 
     # ---- wall / obstacle avoidance via lidar ----
-    normalised_lidar = lidar_readings # already normalised
+    normalised_lidar = lidar_readings / 100 # already normalised
     min_lidar = np.min(normalised_lidar)
 
     # graduated penalty: the closer the nearest wall, the larger the penalty
@@ -70,6 +70,9 @@ def custom_reward(car_pos, goal_pos,
     # extra harsh penalty when extremely close (about to collide)
     if min_lidar < LIDAR_DANGER_THRESHOLD:
         reward += LIDAR_PENALTY_SCALE * 2.0 * (LIDAR_DANGER_THRESHOLD - min_lidar)
+    
+    if collided:
+        reward -= 500.0  # strong enough to outweigh the shortcut
 
     return reward
 
