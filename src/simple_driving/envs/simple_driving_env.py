@@ -66,6 +66,7 @@ class SimpleDrivingEnv(gym.Env):
         self.map_height = 250
         self.map_width = 250
         self.step_counter = 0
+        self.collision_detected = False
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -98,6 +99,7 @@ class SimpleDrivingEnv(gym.Env):
           # check collisions with the car to enforce termination for unsafe driving (e.g. going offroad or hitting buildings)
           if(self.collision_detect()):
               self.done = True
+              self.collision_detected = True
               break
 
           if self._termination():
@@ -129,7 +131,8 @@ class SimpleDrivingEnv(gym.Env):
                  lidar_readings=self.lidar_readings, # added this for adding the lidar to the callback
                  prev_dist_to_goal=self.prev_dist_to_goal,
                  dist_to_goal=dist_to_goal,
-                 reached_goal=self.reached_goal
+                 reached_goal=self.reached_goal,
+                 collided=self.collision_detected
              )
         else:
             raise ValueError("No reward_callback provided to SimpleDrivingEnv! You must inject the reward logic.")
@@ -159,6 +162,7 @@ class SimpleDrivingEnv(gym.Env):
         self.plane = Plane(self._p)
         self._envStepCounter = 0
         self.step_count = 0
+        self.collision_detected = False
         
 
         # Clear any existing buildings
