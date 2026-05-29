@@ -67,6 +67,7 @@ class SimpleDrivingEnv(gym.Env):
         self.map_width = 250
         self.step_counter = 0
         self.collision_detected = False
+        self.last_steering = 0.0
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -87,6 +88,7 @@ class SimpleDrivingEnv(gym.Env):
             steering_angle = steerings[action]
             action = [throttle, steering_angle]
         self.car.apply_action(action)
+        self.last_steering = action[1]
         for i in range(self._actionRepeat):
           self._p.stepSimulation()
           if self._renders:
@@ -132,7 +134,8 @@ class SimpleDrivingEnv(gym.Env):
                  prev_dist_to_goal=self.prev_dist_to_goal,
                  dist_to_goal=dist_to_goal,
                  reached_goal=self.reached_goal,
-                 collided=self.collision_detected
+                 collided=self.collision_detected,
+                 steering_angle=self.last_steering
              )
         else:
             raise ValueError("No reward_callback provided to SimpleDrivingEnv! You must inject the reward logic.")
@@ -177,9 +180,7 @@ class SimpleDrivingEnv(gym.Env):
         obstacle_centres = map_data['centroids']
         map_corners = [map_data['min'], map_data['max']]
 
-        #process buildings
-        # for i in range(len(obstacle_boundaries)):
-        #     self.make_custom_obstacles(obstacle_boundaries[i])
+        
 
         #select random x_y position for submap corner 1
         map_width_comp = (map_corners[1][0] - map_corners[0][0]) / 2
@@ -392,7 +393,7 @@ class SimpleDrivingEnv(gym.Env):
              raise ValueError("No observation_callback provided to SimpleDrivingEnv! You must inject the observation logic.")
 
     def _termination(self):
-        return self._envStepCounter > 4000
+        return self._envStepCounter > 50000
 
     def close(self):
         self._p.disconnect()
