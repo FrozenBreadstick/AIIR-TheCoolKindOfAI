@@ -163,6 +163,8 @@ class SimpleDrivingEnv(gym.Env):
         self._envStepCounter = 0
         self.step_count = 0
         self.collision_detected = False
+        self.done = False
+        self.reached_goal = False
         
 
         # Clear any existing buildings
