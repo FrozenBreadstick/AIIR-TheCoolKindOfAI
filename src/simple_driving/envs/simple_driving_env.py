@@ -24,7 +24,7 @@ class SimpleDrivingEnv(gym.Env):
         reward_callback=None,
         observation_callback=None,
         environment_map=None,
-        max_steps=4000
+        max_steps=10000
     ):
         if (isDiscrete):
             self.action_space = gym.spaces.Discrete(9)
@@ -278,7 +278,7 @@ class SimpleDrivingEnv(gym.Env):
         self.goal_object_2 = Goal(self._p, self.goal_2)
 
         # Goal 3: far (end of the map)
-        x3 = boundary_width + (self.end_zone_buffer / 2)
+        x3 = boundary_width * 0.75
         y3 = boundary_height / 2
         self.goal_3 = (x3, y3)
         self.goal_object_3 = Goal(self._p, self.goal_3)

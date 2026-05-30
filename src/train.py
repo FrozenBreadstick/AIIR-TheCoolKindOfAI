@@ -14,74 +14,113 @@ import numpy as np
 # ========================================================
 # Reward Function Configuration Parameters
 # ========================================================
-LIDAR_PENALTY_SCALE = -5.0
-GOAL_REWARD = 1000.0
-STEP_PENALTY = -0.5
-PROGRESS_REWARD_SCALE = 10.0
-LIDAR_CLOSE_THRESHOLD = 0.2      # normalised lidar distance considered "too close"
-LIDAR_DANGER_THRESHOLD = 0.1     # even closer → harsher penalty
+LIDAR_PENALTY_SCALE = -15.0
+GOAL_REWARD_1 = 200.0   # closest goal - biggest reward to prioritise it first
+GOAL_REWARD_2 = 400.0    # middle goal
+GOAL_REWARD_3 = 1000.0    # farthest goal
+STEP_PENALTY = -0.1
+PROGRESS_REWARD_SCALE_1 = 10.0  # strongest pull toward goal 1 (closest)
+PROGRESS_REWARD_SCALE_2 = 7.5
+PROGRESS_REWARD_SCALE_3 = 5.0
+LIDAR_CLOSE_THRESHOLD = 0.08     # 10 meters
+LIDAR_DANGER_THRESHOLD = 0.03   # 5 meters
+COLLISION_PENALTY = -200.0
 
-def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn,
+
+def custom_observation(client, car_pos, car_orn,
+                        goal_pos_1, goal_orn_1,
+                        goal_pos_2, goal_orn_2,
+                        goal_pos_3, goal_orn_3,
                         lidar_readings):
 
-    observation = [0.0, 0.0]
+    # 6 values: relative x,y for each of 3 goals
+    observation = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-    # invert car transform
     inv_car_pos, inv_car_orn = client.invertTransform(car_pos, car_orn)
 
-    # relative goal position
-    rel_goal_pos, _ = client.multiplyTransforms(inv_car_pos, inv_car_orn, goal_pos, goal_orn)
+    rel_goal_pos_1, _ = client.multiplyTransforms(inv_car_pos, inv_car_orn, goal_pos_1, goal_orn_1)
+    rel_goal_pos_2, _ = client.multiplyTransforms(inv_car_pos, inv_car_orn, goal_pos_2, goal_orn_2)
+    rel_goal_pos_3, _ = client.multiplyTransforms(inv_car_pos, inv_car_orn, goal_pos_3, goal_orn_3)
 
-    observation[0] = rel_goal_pos[0]
-    observation[1] = rel_goal_pos[1]
+    observation[0] = rel_goal_pos_1[0]
+    observation[1] = rel_goal_pos_1[1]
+    observation[2] = rel_goal_pos_2[0]
+    observation[3] = rel_goal_pos_2[1]
+    observation[4] = rel_goal_pos_3[0]
+    observation[5] = rel_goal_pos_3[1]
 
-    # normalise lidar to [0, 1]
-    lidar_readings = lidar_readings / 100.0
+    # Normalise lidar to [0, 1]
+    lidar_normalised = lidar_readings / 100.0
 
-    observation = np.concatenate([observation, lidar_readings])
+    observation = np.concatenate([observation, lidar_normalised])
 
     return observation
 
 
-def custom_reward(car_pos, goal_pos,
-                  lidar_readings, prev_dist_to_goal, dist_to_goal, reached_goal, collided):
+def custom_reward(car_pos, goal_pos_1, goal_pos_2, goal_pos_3,
+                  lidar_readings,
+                  prev_dist_to_goal_1, prev_dist_to_goal_2, prev_dist_to_goal_3,
+                  dist_to_goal_1, dist_to_goal_2, dist_to_goal_3,
+                  reached_goal_1, reached_goal_2, reached_goal_3,
+                  goal_1_reward_given, goal_2_reward_given, goal_3_reward_given,
+                  collided):
 
     reward = 0.0
 
-    # small penalty every step to encourage efficiency
+    # Step penalty to encourage efficiency
     reward += STEP_PENALTY
 
-    # reward for making progress toward the goal
-    reward += PROGRESS_REWARD_SCALE * (prev_dist_to_goal - dist_to_goal)
+    # --- Goal rewards (one-time each) ---
+    if reached_goal_1:
+        reward += GOAL_REWARD_1
+    if reached_goal_2:
+        reward += GOAL_REWARD_2
+    if reached_goal_3:
+        reward += GOAL_REWARD_3
 
-    # big reward for reaching the goal
-    if reached_goal:
-        reward += GOAL_REWARD
+    # --- Progress reward toward the next uncollected goal ---
+    # Prioritise closest goal first, then middle, then far
+    if not goal_1_reward_given:
+        progress = np.clip(prev_dist_to_goal_1 - dist_to_goal_1, -2.0, 2.0)
+        reward += PROGRESS_REWARD_SCALE_1 * progress
+    elif not goal_2_reward_given:
+        progress = np.clip(prev_dist_to_goal_2 - dist_to_goal_2, -2.0, 2.0)
+        reward += PROGRESS_REWARD_SCALE_2 * progress
+    elif not goal_3_reward_given:
+        progress = np.clip(prev_dist_to_goal_3 - dist_to_goal_3, -2.0, 2.0)
+        reward += PROGRESS_REWARD_SCALE_3 * progress
 
-    # ---- wall / obstacle avoidance via lidar ----
-    normalised_lidar = lidar_readings / 100 # already normalised
+    # --- Proximity hint: small reward for being close to any uncollected goal ---
+    max_dist = 400.0
+    if not goal_1_reward_given:
+        reward += (1.0 - dist_to_goal_1 / max_dist) * 2.0
+    elif not goal_2_reward_given:
+        reward += (1.0 - dist_to_goal_2 / max_dist) * 2.0
+    elif not goal_3_reward_given:
+        reward += (1.0 - dist_to_goal_3 / max_dist) * 2.0
+
+    # --- LiDAR wall avoidance ---
+    normalised_lidar = lidar_readings / 100.0
     min_lidar = np.min(normalised_lidar)
 
-    # graduated penalty: the closer the nearest wall, the larger the penalty
     if min_lidar < LIDAR_CLOSE_THRESHOLD:
-        # linear penalty that grows as distance shrinks
         reward += LIDAR_PENALTY_SCALE * (LIDAR_CLOSE_THRESHOLD - min_lidar)
 
-    # extra harsh penalty when extremely close (about to collide)
     if min_lidar < LIDAR_DANGER_THRESHOLD:
-        reward += LIDAR_PENALTY_SCALE * 2.0 * (LIDAR_DANGER_THRESHOLD - min_lidar)
-    
+        reward += LIDAR_PENALTY_SCALE * 3.0 * (LIDAR_DANGER_THRESHOLD - min_lidar)
+
+    # --- Collision penalty ---
     if collided:
-        reward -= 500.0  # strong enough to outweigh the shortcut
+        reward += COLLISION_PENALTY
+        return reward  # return immediately
 
     return reward
 
 
-# You can change these variables for more training steps or if you have a powerful CPU:
-TOTAL_TIMESTEPS = 500_000
+# Training configuration
+TOTAL_TIMESTEPS = 5_000_000
 N_ENVS = 8
-MODEL_PATH      = "model/ppo_simple_driving_model"
-MAX_GOAL_DIST   = 1200.0
+MODEL_PATH = "model/ppo_simple_driving_model"
 
 if __name__ == "__main__":
     env_kwargs = {
@@ -89,7 +128,8 @@ if __name__ == "__main__":
         "isDiscrete": False,
         "reward_callback": custom_reward,
         "observation_callback": custom_observation,
-        "environment_map": r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz"
+        "environment_map": r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz",
+        "max_steps": 30000
     }
     env = make_vec_env(
         "SimpleDriving-v0",
@@ -101,7 +141,7 @@ if __name__ == "__main__":
 
     if os.path.exists(MODEL_PATH + ".zip"):
         print(f"Loading existing model from {MODEL_PATH} ...")
-        ppo_agent = PPO.load(MODEL_PATH, env=env, tensorboard_log="./ppo_tensorboard/")
+        ppo_agent = PPO.load(MODEL_PATH, env=env, device="cpu", tensorboard_log="./ppo_tensorboard/")
     else:
         ppo_agent = PPO(
             "MlpPolicy",
@@ -111,6 +151,7 @@ if __name__ == "__main__":
             batch_size=256,
             ent_coef=0.01,
             verbose=1,
+            device="cpu",
             tensorboard_log="./ppo_tensorboard/"
         )
 
