@@ -43,20 +43,28 @@ class SimpleDrivingEnv(gym.Env):
         else:
           self._p = bc.BulletClient()
 
-        self.reached_goal = False
+        self.reached_goal_1 = False
+        self.reached_goal_2 = False
+        self.reached_goal_3 = False
         self._timeStep = 0.01
         self._actionRepeat = 50
         self._renders = renders
         self._isDiscrete = isDiscrete
         self.car = None
-        self.goal_object = None
-        self.goal = None
+        self.goal_object_1 = None
+        self.goal_object_2 = None
+        self.goal_object_3 = None
+        self.goal_1 = None
+        self.goal_2 = None
+        self.goal_3 = None
         self.obstacle_object = None
         self.obstacle_pos = None
         self.has_obstacle = False
         self.lidar_readings = None
         self.done = False
-        self.prev_dist_to_goal = None
+        self.prev_dist_to_goal_1 = None
+        self.prev_dist_to_goal_2 = None
+        self.prev_dist_to_goal_3 = None
         self.rendered_img = None
         self.render_rot_matrix = None
         self.building_array = [] # list to keep track of building objects for resetting and cleanup
@@ -93,7 +101,9 @@ class SimpleDrivingEnv(gym.Env):
             time.sleep(self._timeStep)
 
           car_pos, car_orn = self._p.getBasePositionAndOrientation(self.car.car)
-          goal_pos, goal_orn = self._p.getBasePositionAndOrientation(self.goal_object.goal)
+          goal_pos_1, goal_orn_1 = self._p.getBasePositionAndOrientation(self.goal_object_1.goal)
+          goal_pos_2, goal_orn_2 = self._p.getBasePositionAndOrientation(self.goal_object_2.goal)
+          goal_pos_3, goal_orn_3 = self._p.getBasePositionAndOrientation(self.goal_object_3.goal)
           car_ob = self.getExtendedObservation()
 
           # check collisions with the car to enforce termination for unsafe driving (e.g. going offroad or hitting buildings)
@@ -110,8 +120,12 @@ class SimpleDrivingEnv(gym.Env):
         # Compute reward as L2 change in distance to goal
         # dist_to_goal = math.sqrt(((car_ob[0] - self.goal[0]) ** 2 +
                                   # (car_ob[1] - self.goal[1]) ** 2))
-        dist_to_goal = math.sqrt(((car_pos[0] - goal_pos[0]) ** 2 +
+        dist_to_goal_1 = math.sqrt(((car_pos[0] - goal_pos[0]) ** 2 +
                                   (car_pos[1] - goal_pos[1]) ** 2))
+        dist_to_goal_2 = math.sqrt(((car_pos[0] - goal_pos_2[0]) ** 2 +
+                                  (car_pos[1] - goal_pos_2[1]) ** 2))
+        dist_to_goal_3 = math.sqrt(((car_pos[0] - goal_pos_3[0]) ** 2 +
+                                  (car_pos[1] - goal_pos_3[1]) ** 2))
                                   
         # Check termination constraints so students can't cheat the physics
         # if self.has_obstacle:
@@ -119,25 +133,40 @@ class SimpleDrivingEnv(gym.Env):
         #     if dist_to_obs < self.minimum_safe_distance:
         #         self.done = True
                 
-        if dist_to_goal < 1.5 and not self.reached_goal:
+        if dist_to_goal_1 < 1.5 and not self.reached_goal_1:
+            self.reached_goal_1 = True
+
+        if dist_to_goal_2 < 1.5 and not self.reached_goal_2:
+            self.reached_goal_2 = True
+
+        if dist_to_goal_3 < 1.5 and not self.reached_goal_3:
+            self.reached_goal_3 = True
+
+        if self.reached_goal_1 and self.reached_goal_2 and self.reached_goal_3:
             self.done = True
-            self.reached_goal = True
-            
+
         if self.reward_callback is not None:
              # Calculate reward via external student function
              reward = self.reward_callback(
                  car_pos=car_pos, 
-                 goal_pos=goal_pos,
+                 goal_pos_1=goal_pos_1,
+                 goal_pos_2=goal_pos_2,
+                 goal_pos_3=goal_pos_3,
                  lidar_readings=self.lidar_readings, # added this for adding the lidar to the callback
-                 prev_dist_to_goal=self.prev_dist_to_goal,
-                 dist_to_goal=dist_to_goal,
-                 reached_goal=self.reached_goal,
+                 prev_dist_to_goal_1=self.prev_dist_to_goal_1,
+                 prev_dist_to_goal_2=self.prev_dist_to_goal_2,
+                 prev_dist_to_goal_3=self.prev_dist_to_goal_3,
+                 reached_goal_1=self.reached_goal_1,
+                 reached_goal_2=self.reached_goal_2,
+                 reached_goal_3=self.reached_goal_3,
                  collided=self.collision_detected
              )
         else:
             raise ValueError("No reward_callback provided to SimpleDrivingEnv! You must inject the reward logic.")
 
-        self.prev_dist_to_goal = dist_to_goal
+        self.prev_dist_to_goal_1 = dist_to_goal_1
+        self.prev_dist_to_goal_2 = dist_to_goal_2
+        self.prev_dist_to_goal_3 = dist_to_goal_3
 
         ob = np.array(car_ob, dtype=np.float32)
 
@@ -164,8 +193,12 @@ class SimpleDrivingEnv(gym.Env):
         self.step_count = 0
         self.collision_detected = False
         self.done = False
-        self.reached_goal = False
-        
+        self.reached_goal_1 = False
+        self.reached_goal_2 = False
+        self.reached_goal_3 = False
+        self.prev_dist_to_goal_1 = None
+        self.prev_dist_to_goal_2 = None
+        self.prev_dist_to_goal_3 = None
 
         # Clear any existing buildings
         self.building_array = []
@@ -245,15 +278,37 @@ class SimpleDrivingEnv(gym.Env):
             basePosition=[-random_x, -random_y, 0] # position is irrelevant since vertices are in world coordinates
         )
 
-        # Set the goal to end in the opposite side of the map from the car's starting position
-        x = (boundary_width + (self.end_zone_buffer / 2))
-        y = ((boundary_height / 2))
-        self.goal = (x, y)
-        self.done = False
-        self.reached_goal = False
-
+        # Set the goal1 to end in the opposite side of the map from the car's starting position
+        x1 = (boundary_width + (self.end_zone_buffer / 2))
+        y1 = ((boundary_height / 2))
+        self.goal_1 = (x1, y1)
+        
         # Visual element of the goal
-        self.goal_object = Goal(self._p, self.goal)
+        self.goal_object_1 = Goal(self._p, self.goal_1)
+
+        # Set the goal2 to somewhere in the middle of the map from the car's starting position
+        left_or_right_goal_midpoint = self.np_random.choice([True, False])
+        if left_or_right_goal_midpoint: 
+            multiplier = 1
+        else: 
+            multiplier = 3 
+        x2 = (boundary_width / 2)
+        y2 = ((boundary_height / 4) * multiplier)
+        self.goal_2 = (x2, y2)
+        #visual element of the goal
+        self.goal_object_2 = Goal(self._p, self.goal_2)
+
+        # Set the goal3 to somewhere in the front of the map near the car's starting position
+        left_or_right_goal_front = self.np_random.choice([True, False])
+        if left_or_right_goal_front:
+            multiplier = 1
+        else:
+            multiplier = 3
+        x3 = (boundary_width / 4)
+        y3 = ((boundary_height / 4) * multiplier)
+        self.goal_3 = (x3, y3)
+        #visual element of the goal
+        self.goal_object_3 = Goal(self._p, self.goal_3)
 
         # set car position to be in the opposite mid point from the goal
         car_x = (-(self.end_zone_buffer / 2))
@@ -373,8 +428,10 @@ class SimpleDrivingEnv(gym.Env):
 
     def getExtendedObservation(self):
         car_pos, car_orn = self._p.getBasePositionAndOrientation(self.car.car)
-        goal_pos, goal_orn = self._p.getBasePositionAndOrientation(self.goal_object.goal)
-        
+        goal_pos_1, goal_orn_1 = self._p.getBasePositionAndOrientation(self.goal_object_1.goal)
+        goal_pos_2, goal_orn_2 = self._p.getBasePositionAndOrientation(self.goal_object_2.goal)
+        goal_pos_3, goal_orn_3 = self._p.getBasePositionAndOrientation(self.goal_object_3.goal)
+
         # lidar stuff
         self.lidar_readings = self.car.get_lidar_readings()
 
@@ -384,8 +441,12 @@ class SimpleDrivingEnv(gym.Env):
                 client=self._p,
                 car_pos=car_pos,
                 car_orn=car_orn,
-                goal_pos=goal_pos,
-                goal_orn=goal_orn,
+                goal_pos_1=goal_pos_1,
+                goal_orn_1=goal_orn_1,
+                goal_pos_2=goal_pos_2,
+                goal_orn_2=goal_orn_2,
+                goal_pos_3=goal_pos_3,
+                goal_orn_3=goal_orn_3,
                 lidar_readings=self.lidar_readings # added this for adding the lidar to the callback
             )
         else:
