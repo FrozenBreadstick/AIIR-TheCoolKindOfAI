@@ -73,7 +73,11 @@ class Car:
             hit_fraction = r[2]
             distances.append(hit_fraction * self.lidar_range)
 
-        return np.array(distances)
+        distances = np.array(distances)
+
+        distances = distances / self.lidar_range  # Normalize to [0, 1]
+
+        return distances
 
     def apply_action(self, action):
         # Expects action to be two dimensional

@@ -32,9 +32,9 @@ class SimpleDrivingEnv(gym.Env):
                 low=np.array([-1, -.6], dtype=np.float32),
                 high=np.array([1, .6], dtype=np.float32))
         self.observation_space = gym.spaces.box.Box(
-            low=np.array([-2000, -2000] + [0]*36, dtype=np.float32),
-            high=np.array([2000, 2000] + [1]*36, dtype=np.float32),
-            shape=(38,),
+            low=np.array([-2000, -2000, -2000, -2000, -2000, -2000] + [0]*36, dtype=np.float32),
+            high=np.array([2000, 2000, 2000, 2000, 2000, 2000] + [1]*36, dtype=np.float32),
+            shape=(42,),
             dtype=np.float32)
         self.np_random, _ = gym.utils.seeding.np_random()
 
@@ -75,6 +75,9 @@ class SimpleDrivingEnv(gym.Env):
         self.map_width = 250
         self.step_counter = 0
         self.collision_detected = False
+        self.goal_1_reward_given = False
+        self.goal_2_reward_given = False
+        self.goal_3_reward_given = False
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -120,8 +123,8 @@ class SimpleDrivingEnv(gym.Env):
         # Compute reward as L2 change in distance to goal
         # dist_to_goal = math.sqrt(((car_ob[0] - self.goal[0]) ** 2 +
                                   # (car_ob[1] - self.goal[1]) ** 2))
-        dist_to_goal_1 = math.sqrt(((car_pos[0] - goal_pos[0]) ** 2 +
-                                  (car_pos[1] - goal_pos[1]) ** 2))
+        dist_to_goal_1 = math.sqrt(((car_pos[0] - goal_pos_1[0]) ** 2 +
+                                  (car_pos[1] - goal_pos_1[1]) ** 2))
         dist_to_goal_2 = math.sqrt(((car_pos[0] - goal_pos_2[0]) ** 2 +
                                   (car_pos[1] - goal_pos_2[1]) ** 2))
         dist_to_goal_3 = math.sqrt(((car_pos[0] - goal_pos_3[0]) ** 2 +
@@ -133,16 +136,19 @@ class SimpleDrivingEnv(gym.Env):
         #     if dist_to_obs < self.minimum_safe_distance:
         #         self.done = True
                 
-        if dist_to_goal_1 < 1.5 and not self.reached_goal_1:
+        if dist_to_goal_1 < 1.5 and not self.goal_1_reward_given:
             self.reached_goal_1 = True
+            self.goal_1_reward_given = True
 
-        if dist_to_goal_2 < 1.5 and not self.reached_goal_2:
+        if dist_to_goal_2 < 1.5 and not self.goal_2_reward_given:
             self.reached_goal_2 = True
+            self.goal_2_reward_given = True
 
-        if dist_to_goal_3 < 1.5 and not self.reached_goal_3:
+        if dist_to_goal_3 < 1.5 and not self.goal_3_reward_given:
             self.reached_goal_3 = True
+            self.goal_3_reward_given = True
 
-        if self.reached_goal_1 and self.reached_goal_2 and self.reached_goal_3:
+        if self.goal_1_reward_given and self.goal_2_reward_given and self.goal_3_reward_given:
             self.done = True
 
         if self.reward_callback is not None:
@@ -153,12 +159,18 @@ class SimpleDrivingEnv(gym.Env):
                  goal_pos_2=goal_pos_2,
                  goal_pos_3=goal_pos_3,
                  lidar_readings=self.lidar_readings, # added this for adding the lidar to the callback
+                 dist_to_goal_1=dist_to_goal_1,
+                 dist_to_goal_2=dist_to_goal_2,
+                 dist_to_goal_3=dist_to_goal_3,
                  prev_dist_to_goal_1=self.prev_dist_to_goal_1,
                  prev_dist_to_goal_2=self.prev_dist_to_goal_2,
                  prev_dist_to_goal_3=self.prev_dist_to_goal_3,
                  reached_goal_1=self.reached_goal_1,
                  reached_goal_2=self.reached_goal_2,
                  reached_goal_3=self.reached_goal_3,
+                 goal_1_reward_given=self.goal_1_reward_given,
+                 goal_2_reward_given=self.goal_2_reward_given,
+                 goal_3_reward_given=self.goal_3_reward_given,
                  collided=self.collision_detected
              )
         else:
@@ -167,6 +179,9 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal_1 = dist_to_goal_1
         self.prev_dist_to_goal_2 = dist_to_goal_2
         self.prev_dist_to_goal_3 = dist_to_goal_3
+        self.reached_goal_1 = False
+        self.reached_goal_2 = False
+        self.reached_goal_3 = False
 
         ob = np.array(car_ob, dtype=np.float32)
 
@@ -199,6 +214,9 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal_1 = None
         self.prev_dist_to_goal_2 = None
         self.prev_dist_to_goal_3 = None
+        self.goal_1_reward_given = False
+        self.goal_2_reward_given = False
+        self.goal_3_reward_given = False
 
         # Clear any existing buildings
         self.building_array = []
@@ -234,7 +252,39 @@ class SimpleDrivingEnv(gym.Env):
         random_x = self.np_random.uniform(map_corners[0][0], map_corners[0][0] + boundary_width)
         random_y = self.np_random.uniform(map_corners[0][1], map_corners[0][1] + boundary_height)
 
-        # filter buildings to only those within the selected submap
+        # Set the goal1 to end in the opposite side of the map from the car's starting position
+        x1 = (boundary_width + (self.end_zone_buffer / 2))
+        y1 = ((boundary_height / 2))
+        self.goal_1 = (x1, y1)
+        
+        # Visual element of the goal
+        self.goal_object_1 = Goal(self._p, self.goal_1)
+
+        # Set the goal2 to somewhere in the middle of the map from the car's starting position
+        left_or_right_goal_midpoint = self.np_random.choice([True, False])
+        if left_or_right_goal_midpoint: 
+            multiplier = 1
+        else: 
+            multiplier = 3 
+        x2 = (boundary_width / 2)
+        y2 = ((boundary_height / 4) * multiplier)
+        self.goal_2 = (x2, y2)
+        #visual element of the goal
+        self.goal_object_2 = Goal(self._p, self.goal_2)
+
+        # Set the goal3 to somewhere in the front of the map near the car's starting position
+        left_or_right_goal_front = self.np_random.choice([True, False])
+        if left_or_right_goal_front:
+            multiplier = 1
+        else:
+            multiplier = 3
+        x3 = (boundary_width / 4)
+        y3 = ((boundary_height / 4) * multiplier)
+        self.goal_3 = (x3, y3)
+        #visual element of the goal
+        self.goal_object_3 = Goal(self._p, self.goal_3)
+
+        # filter buildings to only those within the selected submap and not around the goals (to ensure at least some feasible paths to the goals and to prevent impossible scenarios where the car starts in a building)
         for i in range(len(obstacle_boundaries)):
             building_center = obstacle_centres[i]
             if (building_center[0] >= random_x and building_center[0] <= random_x + boundary_width and
@@ -278,38 +328,6 @@ class SimpleDrivingEnv(gym.Env):
             basePosition=[-random_x, -random_y, 0] # position is irrelevant since vertices are in world coordinates
         )
 
-        # Set the goal1 to end in the opposite side of the map from the car's starting position
-        x1 = (boundary_width + (self.end_zone_buffer / 2))
-        y1 = ((boundary_height / 2))
-        self.goal_1 = (x1, y1)
-        
-        # Visual element of the goal
-        self.goal_object_1 = Goal(self._p, self.goal_1)
-
-        # Set the goal2 to somewhere in the middle of the map from the car's starting position
-        left_or_right_goal_midpoint = self.np_random.choice([True, False])
-        if left_or_right_goal_midpoint: 
-            multiplier = 1
-        else: 
-            multiplier = 3 
-        x2 = (boundary_width / 2)
-        y2 = ((boundary_height / 4) * multiplier)
-        self.goal_2 = (x2, y2)
-        #visual element of the goal
-        self.goal_object_2 = Goal(self._p, self.goal_2)
-
-        # Set the goal3 to somewhere in the front of the map near the car's starting position
-        left_or_right_goal_front = self.np_random.choice([True, False])
-        if left_or_right_goal_front:
-            multiplier = 1
-        else:
-            multiplier = 3
-        x3 = (boundary_width / 4)
-        y3 = ((boundary_height / 4) * multiplier)
-        self.goal_3 = (x3, y3)
-        #visual element of the goal
-        self.goal_object_3 = Goal(self._p, self.goal_3)
-
         # set car position to be in the opposite mid point from the goal
         car_x = (-(self.end_zone_buffer / 2))
         car_y = ((boundary_height / 2))
@@ -352,8 +370,12 @@ class SimpleDrivingEnv(gym.Env):
         # Get observation to return
         car_pos = self.car.get_observation()
 
-        self.prev_dist_to_goal = math.sqrt(((car_pos[0] - self.goal[0]) ** 2 +
-                                           (car_pos[1] - self.goal[1]) ** 2))
+        self.prev_dist_to_goal_1 = math.sqrt(((car_pos[0] - self.goal_1[0]) ** 2 +
+                                             (car_pos[1] - self.goal_1[1]) ** 2))
+        self.prev_dist_to_goal_2 = math.sqrt(((car_pos[0] - self.goal_2[0]) ** 2 +
+                                             (car_pos[1] - self.goal_2[1]) ** 2))
+        self.prev_dist_to_goal_3 = math.sqrt(((car_pos[0] - self.goal_3[0]) ** 2 +
+                                             (car_pos[1] - self.goal_3[1]) ** 2))
         car_ob = self.getExtendedObservation()
 
         # centre camera on the car for testing
@@ -453,12 +475,17 @@ class SimpleDrivingEnv(gym.Env):
              raise ValueError("No observation_callback provided to SimpleDrivingEnv! You must inject the observation logic.")
 
     def _termination(self):
-        return self._envStepCounter > 4000
+        return self._envStepCounter > 100000
 
     def close(self):
         self._p.disconnect()
 
     def make_custom_obstacles(self, obstacle_vertices, random_x=0, random_y=0):
+
+        #check a goal is not within the building polygon, if it is, skip spawning that building to ensure there is always a feasible path to the goals
+        for goal in [self.goal_1, self.goal_2, self.goal_3]:
+            if self.point_in_convex_quad(goal, obstacle_vertices, random_x, random_y):
+                return
 
         # change the vertices shape from list of 4 (x,y) to list of 8 (x,y,z) for pybullet
         obstacle_vertices_3d = []
@@ -505,3 +532,35 @@ class SimpleDrivingEnv(gym.Env):
             if c[2] != self.plane.get_ids(): # if the car is colliding with anything other than the ground plane, return True for collision
                 return True
         return False
+    
+    # checks if a goal is within a building by checking if the goal point is within the polygon defined by the building vertices. This is used to filter out buildings that are on top of the goals when spawning the environment, to ensure there is always a feasible path to the goals
+    def point_in_convex_quad(self, point, polygon, random_x, random_y):
+        x, y = point
+
+        def cross(ax, ay, bx, by):
+            return ax * by - ay * bx
+
+        sign = None
+        n = len(polygon)
+
+        for i in range(n):
+            x1 = polygon[i][0] - random_x
+            y1 = polygon[i][1] - random_y
+            x2 = polygon[(i + 1) % n][0] - random_x
+            y2 = polygon[(i + 1) % n][1] - random_y
+
+            edge_x = x2 - x1
+            edge_y = y2 - y1
+
+            point_x = x - x1
+            point_y = y - y1
+
+            c = cross(edge_x, edge_y, point_x, point_y)
+
+            if c != 0:
+                if sign is None:
+                    sign = c > 0
+                elif (c > 0) != sign:
+                    return False
+
+        return True
