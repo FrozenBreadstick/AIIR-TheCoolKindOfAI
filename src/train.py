@@ -5,6 +5,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
+from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 import simple_driving
 import time
 import os
@@ -14,74 +15,113 @@ import numpy as np
 # ========================================================
 # Reward Function Configuration Parameters
 # ========================================================
-LIDAR_PENALTY_SCALE = -5.0
-GOAL_REWARD = 1000.0
-STEP_PENALTY = -0.5
-PROGRESS_REWARD_SCALE = 10.0
-LIDAR_CLOSE_THRESHOLD = 0.2      # normalised lidar distance considered "too close"
-LIDAR_DANGER_THRESHOLD = 0.1     # even closer → harsher penalty
+GOAL_REWARD_1 = 200.0
+GOAL_REWARD_2 = 50
+STEP_PENALTY = -0.2
+PROGRESS_REWARD_SCALE_1 = 10.0
+PROGRESS_REWARD_SCALE_2 = 10.0
+LIDAR_CLOSE_THRESHOLD = 0.1
+LIDAR_DANGER_THRESHOLD = 0.02
+LIDAR_PENALTY_SCALE = -1.0
+COLLISION_PENALTY = -400.0      # strong penalty for collisions to encourage avoidance
 
-def custom_observation(client, car_pos, car_orn, goal_pos, goal_orn,
-                        lidar_readings):
+def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpoint_pos, checkpoint_orn, lidar_readings):
 
-    observation = [0.0, 0.0]
+    observation = [0.0, 0.0, 0.0, 0.0] # placeholder for relative goal position (x, y) of the 3 goals
+
+    if checkpoint_pos is None:
+        checkpoint_pos = goal_pos_1  # if no checkpoint, use goal position as dummy
+        checkpoint_orn = goal_orn_1
 
     # invert car transform
     inv_car_pos, inv_car_orn = client.invertTransform(car_pos, car_orn)
 
     # relative goal position
-    rel_goal_pos, _ = client.multiplyTransforms(inv_car_pos, inv_car_orn, goal_pos, goal_orn)
+    rel_goal_pos_1, _ = client.multiplyTransforms(inv_car_pos, inv_car_orn, goal_pos_1, goal_orn_1)
 
-    observation[0] = rel_goal_pos[0]
-    observation[1] = rel_goal_pos[1]
+    rel_checkpoint_pos, _ = client.multiplyTransforms(
+        inv_car_pos, inv_car_orn,
+        checkpoint_pos, checkpoint_orn
+    )
+    
+    observation[0] = rel_goal_pos_1[0]
+    observation[1] = rel_goal_pos_1[1]
+    observation[2] = rel_checkpoint_pos[0]
+    observation[3] = rel_checkpoint_pos[1]
 
     # normalise lidar to [0, 1]
-    lidar_readings = lidar_readings / 100.0
+    # lidar_readings = lidar_readings / 100.0
+    # convert LiDAR readings to relative positions of detected obstacles in the car's local frame
+    # (assuming lidar_readings are distances at fixed angles around the car)
+    # lidar_positions = []
+    # for i, distance in enumerate(lidar_readings):
+    #     angle = 2 * math.pi * i / len(lidar_readings)  # angle of this LiDAR ray
+    #     x = 100 * distance * math.cos(angle)  # convert polar to Cartesian coordinates
+    #     y = 100 * distance * math.sin(angle)
+    #     lidar_positions.append(x)  # add both x and y to the observation
+    #     lidar_positions.append(y)
 
-    observation = np.concatenate([observation, lidar_readings])
+    # lidar_positions = np.array(lidar_positions, dtype=np.float32)
+
+    observation = np.concatenate([observation, lidar_readings.astype(np.float32)])
 
     return observation
 
 
-def custom_reward(car_pos, goal_pos,
-                  lidar_readings, prev_dist_to_goal, dist_to_goal, reached_goal, collided):
+def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist_to_goal_1, prev_dist_to_checkpoint,
+                  dist_to_goal_1, dist_to_checkpoint, reached_goal_1, reached_checkpoint, collided):
 
     reward = 0.0
 
     # small penalty every step to encourage efficiency
     reward += STEP_PENALTY
 
-    # reward for making progress toward the goal
-    reward += PROGRESS_REWARD_SCALE * (prev_dist_to_goal - dist_to_goal)
-
-    # big reward for reaching the goal
-    if reached_goal:
-        reward += GOAL_REWARD
+    # reward for making progress toward the goals, calculated as the change in distance to each goal since the last step
+    # big reward for reaching the goal small for on the way
+    if reached_goal_1:
+        reward += GOAL_REWARD_1
+    elif prev_dist_to_goal_1 is not None and dist_to_checkpoint is None:
+        reward += PROGRESS_REWARD_SCALE_1 * (prev_dist_to_goal_1 - dist_to_goal_1)
+    
+    if reached_checkpoint:
+        reward += GOAL_REWARD_2
+    elif (dist_to_checkpoint is not None
+          and prev_dist_to_checkpoint is not None):
+        reward += PROGRESS_REWARD_SCALE_2 * (prev_dist_to_checkpoint - dist_to_checkpoint)
+ 
 
     # ---- wall / obstacle avoidance via lidar ----
-    normalised_lidar = lidar_readings / 100 # already normalised
-    min_lidar = np.min(normalised_lidar)
+    # normalised_lidar = lidar_readings / 100 # already normalised
+    min_lidar = np.min(lidar_readings)
+    # print(f"Minimum LiDAR reading: {min_lidar:.3f}")
 
     # graduated penalty: the closer the nearest wall, the larger the penalty
     if min_lidar < LIDAR_CLOSE_THRESHOLD:
-        # linear penalty that grows as distance shrinks
         reward += LIDAR_PENALTY_SCALE * (LIDAR_CLOSE_THRESHOLD - min_lidar)
 
-    # extra harsh penalty when extremely close (about to collide)
     if min_lidar < LIDAR_DANGER_THRESHOLD:
-        reward += LIDAR_PENALTY_SCALE * 2.0 * (LIDAR_DANGER_THRESHOLD - min_lidar)
+        reward += 2 * LIDAR_PENALTY_SCALE * (LIDAR_DANGER_THRESHOLD - min_lidar)
     
     if collided:
-        reward -= 500.0  # strong enough to outweigh the shortcut
+        reward += COLLISION_PENALTY  # strong enough to outweigh the shortcut
 
     return reward
 
 
 # You can change these variables for more training steps or if you have a powerful CPU:
-TOTAL_TIMESTEPS = 500_000
+TOTAL_TIMESTEPS = 3_000_000
 N_ENVS = 8
-MODEL_PATH      = "model/ppo_simple_driving_model"
-MAX_GOAL_DIST   = 1200.0
+N_STEPS = 1024
+BATCH_SIZE = 512
+N_EPOCHS = 4
+LEARNING_RATE = 0.0001
+ENTROPY_COEF = 0.05
+GAE_LAMBDA = 0.95
+GAMMA = 0.995
+MAX_GRAD_NORM = 0.3
+CLIP_RANGE = 0.2
+
+MODEL_PATH      = "model\checkpoints\ppo_driving_3700000_steps"
 
 if __name__ == "__main__":
     env_kwargs = {
@@ -99,6 +139,8 @@ if __name__ == "__main__":
         vec_env_kwargs={"start_method": "spawn"}
     )
 
+    env = VecNormalize(env, norm_obs=False, norm_reward=True, clip_reward=10.0)
+
     if os.path.exists(MODEL_PATH + ".zip"):
         print(f"Loading existing model from {MODEL_PATH} ...")
         ppo_agent = PPO.load(MODEL_PATH, env=env, tensorboard_log="./ppo_tensorboard/")
@@ -106,16 +148,25 @@ if __name__ == "__main__":
         ppo_agent = PPO(
             "MlpPolicy",
             env,
-            learning_rate=0.0003,
-            n_steps=512,
-            batch_size=256,
-            ent_coef=0.01,
+            # --- core params ---
+            learning_rate=LEARNING_RATE,
+            n_steps=N_STEPS,
+            batch_size=BATCH_SIZE,
+            n_epochs=N_EPOCHS,
+            # --- Discount and advantage ---
+            gamma=GAMMA,
+            gae_lambda=GAE_LAMBDA,
+            # --- stability ---
+            clip_range=CLIP_RANGE,
+            max_grad_norm=MAX_GRAD_NORM,
+            # --- exploration ---
+            ent_coef=ENTROPY_COEF,
             verbose=1,
             tensorboard_log="./ppo_tensorboard/"
         )
 
     checkpoint_cb = CheckpointCallback(
-        save_freq=max(50_000 // N_ENVS, 1),
+        save_freq=max(100_000 // N_ENVS, 1),
         save_path="./model/checkpoints/",
         name_prefix="ppo_driving",
     )
@@ -123,9 +174,10 @@ if __name__ == "__main__":
     ppo_agent.learn(
         total_timesteps=TOTAL_TIMESTEPS,
         callback=checkpoint_cb,
-        reset_num_timesteps=True,
+        reset_num_timesteps=not os.path.exists(MODEL_PATH + ".zip"),
     )
 
     os.makedirs("model", exist_ok=True)
     ppo_agent.save(MODEL_PATH)
+    env.save(os.path.join("model", "vecnormalize.pkl"))
     print(f"Agent saved to {MODEL_PATH}")

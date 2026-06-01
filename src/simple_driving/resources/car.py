@@ -25,12 +25,16 @@ class Car:
         # *claude* LiDAR parameters
         self.lidar_range = 100.0  # Maximum range in meters
         self.num_rays = 36  # Number of laser rays (1-degree resolution)
+        # FIX 1: Cache the lidar link ID at construction time instead of
+        # searching for it on every single step call. The link never changes
+        # so there is no reason to re-scan all joints each time.
+        self._lidar_link_id = self._find_lidar_link_id()
 
     def get_ids(self):
         return self.car
 
     # *claude* get lidar link
-    def get_lidar_link_id(self):
+    def _find_lidar_link_id(self):
         """Find the LiDAR link ID"""
         num_joints = self.client.getNumJoints(self.car)
         for i in range(num_joints):
@@ -41,11 +45,10 @@ class Car:
 
     # *chat* get lidar readings    
     def get_lidar_readings(self):
-        lidar_link_id = self.get_lidar_link_id()
-        if lidar_link_id == -1:
+        if self._lidar_link_id == -1:
             return np.zeros(self.num_rays)
 
-        link_state = self.client.getLinkState(self.car, lidar_link_id)
+        link_state = self.client.getLinkState(self.car, self._lidar_link_id)
         lidar_pos = link_state[0]
         lidar_orn = link_state[1]
 
@@ -68,14 +71,7 @@ class Car:
 
         results = self.client.rayTestBatch(ray_from, ray_to)
 
-        distances = []
-        for i, r in enumerate(results):
-            hit_fraction = r[2]
-            distances.append(hit_fraction * self.lidar_range)
-
-        distances = np.array(distances)
-
-        distances = distances / self.lidar_range  # Normalize to [0, 1]
+        distances = np.array([r[2] for r in results], dtype=np.float32)
 
         return distances
 
