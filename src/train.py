@@ -11,6 +11,9 @@ import time
 import os
 import math
 import numpy as np
+import torch
+print("GPU available:", torch.cuda.is_available())
+print("GPU name:", torch.cuda.get_device_name(0))
 
 # ========================================================
 # Reward Function Configuration Parameters
@@ -73,7 +76,7 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
 
     reward = 0.0
 
-    # small penalty every step to encourage efficiency
+    # step penalty
     reward += STEP_PENALTY
 
     # reward for making progress toward the goals, calculated as the change in distance to each goal since the last step
@@ -95,7 +98,6 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
     min_lidar = np.min(lidar_readings)
     # print(f"Minimum LiDAR reading: {min_lidar:.3f}")
 
-    # graduated penalty: the closer the nearest wall, the larger the penalty
     if min_lidar < LIDAR_CLOSE_THRESHOLD:
         reward += LIDAR_PENALTY_SCALE * (LIDAR_CLOSE_THRESHOLD - min_lidar)
 
@@ -106,7 +108,6 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
         reward += COLLISION_PENALTY  # strong enough to outweigh the shortcut
 
     return reward
-
 
 # You can change these variables for more training steps or if you have a powerful CPU:
 TOTAL_TIMESTEPS = 3_000_000
@@ -125,6 +126,7 @@ MODEL_PATH      = "model\checkpoints\ppo_driving_3700000_steps"
 
 if __name__ == "__main__":
     env_kwargs = {
+        
         "renders": False,
         "isDiscrete": False,
         "reward_callback": custom_reward,
@@ -143,7 +145,7 @@ if __name__ == "__main__":
 
     if os.path.exists(MODEL_PATH + ".zip"):
         print(f"Loading existing model from {MODEL_PATH} ...")
-        ppo_agent = PPO.load(MODEL_PATH, env=env, tensorboard_log="./ppo_tensorboard/")
+        ppo_agent = PPO.load(MODEL_PATH, env=env, device="cpu", tensorboard_log="./ppo_tensorboard/")
     else:
         ppo_agent = PPO(
             "MlpPolicy",
@@ -162,6 +164,7 @@ if __name__ == "__main__":
             # --- exploration ---
             ent_coef=ENTROPY_COEF,
             verbose=1,
+            device="cpu",
             tensorboard_log="./ppo_tensorboard/"
         )
 

@@ -97,6 +97,7 @@ class SimpleDrivingEnv(gym.Env):
             steering_angle = steerings[action]
             action = [throttle, steering_angle]
         self.car.apply_action(action)
+        self.last_steering = action[1]
         for i in range(self._actionRepeat):
           self._p.stepSimulation()
           if self._renders:
@@ -220,9 +221,7 @@ class SimpleDrivingEnv(gym.Env):
         obstacle_centres = map_data['centroids']
         map_corners = [map_data['min'], map_data['max']]
 
-        #process buildings
-        # for i in range(len(obstacle_boundaries)):
-        #     self.make_custom_obstacles(obstacle_boundaries[i])
+        
 
         #select random x_y position for submap corner 1
         map_width_comp = (map_corners[1][0] - map_corners[0][0]) / 2
@@ -487,6 +486,7 @@ class SimpleDrivingEnv(gym.Env):
              raise ValueError("No observation_callback provided to SimpleDrivingEnv! You must inject the observation logic.")
 
     def _termination(self):
+        return self._envStepCounter > 50000
         return self._envStepCounter > 50000
 
     def close(self):
