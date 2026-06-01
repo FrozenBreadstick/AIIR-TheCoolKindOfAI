@@ -76,7 +76,7 @@ class SimpleDrivingEnv(gym.Env):
         self.step_counter = 0
         self.collision_detected = False
         self.goal_1_reward_given = False
-        self.checkpoint_frequency = 20 # how many path points to skip before spawning a checkpoint, can be tuned based on the density of the map and the desired difficulty of the task
+        self.checkpoint_frequency = 30 # how many path points to skip before spawning a checkpoint, can be tuned based on the density of the map and the desired difficulty of the task
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance
@@ -183,6 +183,19 @@ class SimpleDrivingEnv(gym.Env):
 
         # if self.step_counter % 1000 == 0:
         #     print("obs at step", self.step_counter, ": ", ob) # debug print to check initial observation
+
+        # centre camera on the car for testing
+        car_id = self.car.get_ids()
+        car_pos, _ = self._p.getBasePositionAndOrientation(car_id)
+        # raise camera spawn height
+        camera_pos = [car_pos[0], car_pos[1], 5]
+
+        self._p.resetDebugVisualizerCamera(
+            cameraDistance=8,          # zoom out enough to see car
+            cameraYaw=-90,               # rotation around car
+            cameraPitch=-45,           # look slightly down
+            cameraTargetPosition=camera_pos
+        )
 
         self.step_counter += 1
 

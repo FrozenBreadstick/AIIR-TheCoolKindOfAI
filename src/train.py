@@ -13,7 +13,9 @@ import math
 import numpy as np
 import torch
 print("GPU available:", torch.cuda.is_available())
-print("GPU name:", torch.cuda.get_device_name(0))
+if torch.cuda.is_available():
+    print("GPU name:", torch.cuda.get_device_name(0))
+
 
 # ========================================================
 # Reward Function Configuration Parameters
@@ -25,7 +27,7 @@ PROGRESS_REWARD_SCALE_1 = 10.0
 PROGRESS_REWARD_SCALE_2 = 10.0
 LIDAR_CLOSE_THRESHOLD = 0.1
 LIDAR_DANGER_THRESHOLD = 0.02
-LIDAR_PENALTY_SCALE = -1.0
+LIDAR_PENALTY_SCALE = -2.0
 COLLISION_PENALTY = -400.0      # strong penalty for collisions to encourage avoidance
 
 def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpoint_pos, checkpoint_orn, lidar_readings):
@@ -116,13 +118,13 @@ N_STEPS = 1024
 BATCH_SIZE = 512
 N_EPOCHS = 4
 LEARNING_RATE = 0.0001
-ENTROPY_COEF = 0.05
+ENTROPY_COEF = 0.075
 GAE_LAMBDA = 0.95
 GAMMA = 0.995
 MAX_GRAD_NORM = 0.3
 CLIP_RANGE = 0.2
 
-MODEL_PATH      = "model\checkpoints\ppo_driving_3700000_steps"
+MODEL_PATH      = "model\checkpoints\ppo_driving_6000000_steps"
 
 if __name__ == "__main__":
     env_kwargs = {
