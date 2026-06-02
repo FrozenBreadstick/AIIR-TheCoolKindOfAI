@@ -6,6 +6,7 @@ from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
+from stable_baselines3.common.utils import get_schedule_fn
 import simple_driving
 import time
 import os
@@ -21,13 +22,14 @@ if torch.cuda.is_available():
 # Reward Function Configuration Parameters
 # ========================================================
 GOAL_REWARD_1 = 200.0
-GOAL_REWARD_2 = 50
+GOAL_REWARD_2 = 150.0
 STEP_PENALTY = -0.2
 PROGRESS_REWARD_SCALE_1 = 10.0
 PROGRESS_REWARD_SCALE_2 = 10.0
-LIDAR_CLOSE_THRESHOLD = 0.1
+LIDAR_CLOSE_THRESHOLD = 0.03
 LIDAR_DANGER_THRESHOLD = 0.02
-LIDAR_PENALTY_SCALE = -2.0
+DANGER_MULTIPLIER = 4.0  # how much more to penalise dangerously close obstacles compared to just close ones
+LIDAR_PENALTY_SCALE = -3.0
 COLLISION_PENALTY = -400.0      # strong penalty for collisions to encourage avoidance
 
 def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpoint_pos, checkpoint_orn, lidar_readings):
@@ -104,7 +106,7 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
         reward += LIDAR_PENALTY_SCALE * (LIDAR_CLOSE_THRESHOLD - min_lidar)
 
     if min_lidar < LIDAR_DANGER_THRESHOLD:
-        reward += 2 * LIDAR_PENALTY_SCALE * (LIDAR_DANGER_THRESHOLD - min_lidar)
+        reward += DANGER_MULTIPLIER * LIDAR_PENALTY_SCALE * (LIDAR_DANGER_THRESHOLD - min_lidar)
     
     if collided:
         reward += COLLISION_PENALTY  # strong enough to outweigh the shortcut
@@ -118,13 +120,13 @@ N_STEPS = 1024
 BATCH_SIZE = 512
 N_EPOCHS = 4
 LEARNING_RATE = 0.0001
-ENTROPY_COEF = 0.075
+ENTROPY_COEF = 0.15
 GAE_LAMBDA = 0.95
 GAMMA = 0.995
 MAX_GRAD_NORM = 0.3
 CLIP_RANGE = 0.2
 
-MODEL_PATH      = "model\checkpoints\ppo_driving_6000000_steps"
+MODEL_PATH      = "model\checkpoints\ppo_driving_10700000_steps"
 
 if __name__ == "__main__":
     env_kwargs = {
@@ -147,7 +149,19 @@ if __name__ == "__main__":
 
     if os.path.exists(MODEL_PATH + ".zip"):
         print(f"Loading existing model from {MODEL_PATH} ...")
-        ppo_agent = PPO.load(MODEL_PATH, env=env, device="cpu", tensorboard_log="./ppo_tensorboard/")
+        ppo_agent = PPO.load(MODEL_PATH, env=env, device="cpu", tensorboard_log="./ppo_tensorboard/")             
+        # Override saved hyperparameters with current values
+        # PPO.load restores whatever was saved with the checkpoint,
+        # so without this your constants at the top have no effect on resumed runs
+        ppo_agent.learning_rate = get_schedule_fn(LEARNING_RATE)
+        ppo_agent.ent_coef = ENTROPY_COEF
+        ppo_agent.clip_range = get_schedule_fn(CLIP_RANGE)
+        ppo_agent.max_grad_norm = MAX_GRAD_NORM
+        ppo_agent.n_epochs = N_EPOCHS
+        ppo_agent.gamma = GAMMA
+        ppo_agent.gae_lambda = GAE_LAMBDA
+        ppo_agent.set_env(env)
+        print(f"Hyperparameters updated: lr={LEARNING_RATE}, ent_coef={ENTROPY_COEF}, gamma={GAMMA}")
     else:
         ppo_agent = PPO(
             "MlpPolicy",
