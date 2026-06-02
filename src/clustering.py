@@ -12,6 +12,16 @@ from sklearn.ensemble import RandomForestClassifier
 
 # We are using Laz cus it is more storage space efficient. Laz v1.4 (Point Format 0)
 def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+    """
+    For loading in .laz and .las files
+    
+    Args:
+        path: str -> path to the file to be loaded
+        filename: str -> the filename to check for if we have already loaded that file before (for efficiency)
+
+    Returns:
+        Tuple -> contains an array of points, and an array of ground truth labels (if they exist)
+    """
     print("Loading Points")
     percicus = None
     clarissa = None
