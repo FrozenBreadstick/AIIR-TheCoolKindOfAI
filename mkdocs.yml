@@ -1,0 +1,18 @@
+site_name: Automated City Mapping and Car Driving
+theme:
+  name: material
+  palette:
+    scheme: slate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
