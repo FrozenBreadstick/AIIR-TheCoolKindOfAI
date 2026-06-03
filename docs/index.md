@@ -57,6 +57,12 @@ See below for a list of parameters:
 | --path | string | The filepath of the PointCloud laz file to use. | ```"pointclouds/1/Denoise_NoVeg_Subsampled.laz"``` |
 
 
+TODO ADD TO HERE FOR ALL ARGUMENTS THAT EXIST
+Example command with all arguments specified:
+```bash
+python .\src\main.py --path "pointclouds/1/Denoise_NoVeg_Subsampled.laz"
+```
+
 ---
 
 ## Demo Video
