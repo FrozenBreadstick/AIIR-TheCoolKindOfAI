@@ -244,7 +244,7 @@ def main() -> None:
     The main function that runs all the necessary components to run the Point Cloud segmentation workflow.
     """
     parser = argparse.ArgumentParser(description="Point Cloud Processing for Identifying Buildings")
-    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
+    parser.add_argument("path", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
     args = parser.parse_args()
 
     # Load Data

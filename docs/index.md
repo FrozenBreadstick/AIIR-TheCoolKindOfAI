@@ -47,7 +47,15 @@ pip install -r requirements.txt
 
 ## Usage Guide
 
-blah blah
+To run the full system, run the main.py script from terminal after activating the virtual environment in the root directory of the repository:
+```bash
+python .\src\main.py
+```
+See below for a list of parameters:
+| **Parameter** | **Type** | **Description** | **Default** |
+| :--- | :--- | :--- | :--- |
+| --path | string | The filepath of the PointCloud laz file to use. | ```"pointclouds/1/Denoise_NoVeg_Subsampled.laz"``` |
+
 
 ---
 
