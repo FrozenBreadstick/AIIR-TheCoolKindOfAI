@@ -4,6 +4,9 @@ theme:
   palette:
     scheme: slate
 
+extra_css:
+  - stylesheets/extra.css
+
 plugins:
   - search
   - mkdocstrings:

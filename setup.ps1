@@ -1,15 +1,27 @@
-py -m venv .venv
+# setup.ps1
 
-$filePath = "$PSScriptRoot\.venv\Scripts\Activate.ps1"
-if(-not (Test-Path -Path $filePath)) {
-    throw "Run setup again"
+$venvPath = "$PSScriptRoot\.venv"
+
+if (-not (Test-Path -Path $venvPath)) {
+    Write-Host "Creating virtual environment..." -ForegroundColor Cyan
+    python -m venv $venvPath
+} else {
+    Write-Host "Virtual environment already exists, skipping creation." -ForegroundColor Yellow
 }
 
-. "$PSScriptRoot\.venv\Scripts\Activate.ps1"
-
-if(-not (Test-Path env:VIRTUAL_ENV)) {
-    throw "Run setup again"
+$activationScript = "$venvPath\Scripts\Activate.ps1"
+if (-not (Test-Path -Path $activationScript)) {
+    throw "Failed to create virtual environment. Please delete the .venv folder and try again."
 }
 
+. $activationScript
+
+if (-not (Test-Path env:VIRTUAL_ENV)) {
+    throw "Activation failed. Your PowerShell Execution Policies might be blocking scripts."
+}
+
+Write-Host "Upgrading pip and installing requirements..." -ForegroundColor Cyan
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r "$PSScriptRoot\requirements.txt"
+
+Write-Host "Setup complete! Environment is active." -ForegroundColor Green
