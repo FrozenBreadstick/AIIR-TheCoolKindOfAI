@@ -19,6 +19,9 @@ This system trains a car to travel from one side of a city map to the other by f
 
 ## Installation and Setup
 
+!!! note "Python Version"
+    Ensure python 3.11+ is installed
+
 1. Create a virtual environment:
 ```bash
 py -m venv .venv
