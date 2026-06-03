@@ -15,6 +15,30 @@ This system trains a car to travel from one side of a city map to the other by f
 2. Uses that segmented data to construct a simulation environment representing all the buildings (see [Environment Building](#environment-building))
 3. Trains a robot car to travel from one side of the city to a goal on the other (see [AI Car Training](#ai-car-training-and-testing))
 
+## Results of Example Trained Model
+
+<div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
+  <div style="flex: 1; min-width: 280px;">
+    <h3 style="margin-bottom: 8px;">Car almost clears corner</h3>
+    <video controls width="100%">
+      <source src="media\car_almost_gets_around_corner.mp4" type="video/mp4">
+    </video>
+    <p style="margin-top: 8px; font-size: 0.95em;">
+      In this Video Agent can be seen clearly attempting to drive around the wall to the checkpoint. Unfortunetaly the checkpoint was only just too far away as the agent did eventually hit the wall.
+    </p>
+  </div>
+  <div style="flex: 1; min-width: 280px;">
+    <h3 style="margin-bottom: 8px;">Car successfully clears corner</h3>
+    <video controls width="100%">
+      <source src="media\car_succeeds_around_cornor.mp4" type="video/mp4">
+    </video>
+    <p style="margin-top: 8px; font-size: 0.95em;">
+      In this Video Agent can be seen successfully avoiding a collision with a building that sticks out between the checkpoints. The agent rather than drive straight between the checkpoints avoids the corner of the building and goes on to finish the scenario.
+    </p>
+  </div>
+</div>
+
+For a full demonstration of the system from start to end see "Demo Video".
 ---
 
 ## Installation and Setup
@@ -82,21 +106,6 @@ Below is a video demonstrating how to run the system and what can be expected wh
 </video>
 
 <hr style="border: 5px solid #6e00a1ca;">
-
-<div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
-  <div style="flex: 1; min-width: 280px;">
-    <h3 style="margin-bottom: 8px;">Car almost clears corner</h3>
-    <video controls width="100%">
-      <source src="media\car_almost_gets_around_corner.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div style="flex: 1; min-width: 280px;">
-    <h3 style="margin-bottom: 8px;">Car successfully clears corner</h3>
-    <video controls width="100%">
-      <source src="docs\media\car_succeeds_around_cornor.mp4" type="video/mp4">
-    </video>
-  </div>
-</div>
 
 # Point Cloud Segmentation
 
