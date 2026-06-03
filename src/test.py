@@ -8,13 +8,6 @@ from train import custom_reward, custom_observation
 
 def test_policy():
     print("Loading saved PPO model...")
-    # ========================================================
-    # TODO: Load your custom saved model here once it is trained!
-    # e.g., model = PPO.load("model/ppo_simple_driving_model")
-    # ========================================================
-    
-    # Baseline load (we provided you with an untrained dummy baseline)
-    #model = PPO.load("model/ppo_simple_driving_model")
 
     print("Loading environment with rendering enabled...")
     env = gym.make("SimpleDriving-v0", renders=True, isDiscrete=False, reward_callback=custom_reward, observation_callback=custom_observation, environment_map=r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz")

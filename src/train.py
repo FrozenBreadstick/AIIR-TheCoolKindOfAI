@@ -128,7 +128,7 @@ CLIP_RANGE = 0.2
 
 MODEL_PATH      = "model\checkpoints\ppo_driving_10700000_steps"
 
-if __name__ == "__main__":
+def run_training() -> None:
     env_kwargs = {
         
         "renders": False,
@@ -200,3 +200,6 @@ if __name__ == "__main__":
     ppo_agent.save(MODEL_PATH)
     env.save(os.path.join("model", "vecnormalize.pkl"))
     print(f"Agent saved to {MODEL_PATH}")
+
+if __name__ == "__main__":
+    run_training()

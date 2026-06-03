@@ -13,7 +13,7 @@ from sklearn.ensemble import RandomForestClassifier
 # We are using Laz cus it is more storage space efficient. Laz v1.4 (Point Format 0)
 def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """
-    For loading in .laz and .las files
+    For loading in .laz files
     
     Args:
         path: str -> path to the file to be loaded
@@ -51,7 +51,7 @@ def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]
 
 def visualize(filename: str) -> None:
     """
-    Set up Polyscope serialization.
+    
     """
     print("Visualizing results in Polyscope...")
     ps.init()
@@ -202,9 +202,8 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
     return np.array(centroids), np.array(metrics)
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Point Cloud Segmentation pipeline (K-Means -> PCA -> SVM)")
+    parser = argparse.ArgumentParser(description="Point Cloud Processing for Identifying Buildings")
     parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
-    parser.add_argument("-k", "--clusters", type=int, default=15, help="Number of k-means clusters (default: 20)")
     args = parser.parse_args()
 
     # Load Data
