@@ -4,7 +4,7 @@ $venvPath = "$PSScriptRoot\.venv"
 
 if (-not (Test-Path -Path $venvPath)) {
     Write-Host "Creating virtual environment..." -ForegroundColor Cyan
-    python -m venv $venvPath
+    py -3.11 -m venv $venvPath
 } else {
     Write-Host "Virtual environment already exists, skipping creation." -ForegroundColor Yellow
 }

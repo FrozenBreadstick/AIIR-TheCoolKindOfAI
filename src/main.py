@@ -12,9 +12,12 @@ import test
 #========= Global Configuration Parameters =============
 #=======================================================
 
-# Test/Train - Checkpoint and Model Configuration
+# General Configuration - Mandatory
+RUN_CLUSTER = False # Whether to run the clustering script before training/testing. Set to False if you have already run it and have the necessary files in place.
+RUN_TRAIN = True # Whether to run the training process. Set to False if you only
+RUN_TEST = True # Whether to run the testing process. Set to False if you only want to train a model without testing it immediately after.
 CHECKPOINT_FREQ = 40 # Checkpoint frequency in terms of how many goals spawn in the environment (not PPO update steps)
-MODEL_PATH = "tensor\ppo39.40_137\ppo_driving_10700000_steps" # if you ONLY testing a model, include the relative model path you would like to test. Otherwise if you are training a model include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
+MODEL_PATH = "tensor_data/ppo39.40_137/ppo_driving_13700000_steps" # if you ONLY testing a model, include the relative model path you would like to test. Otherwise if you are training a model include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
 
 # Train - Training Configuration Parameters
 TOTAL_TIMESTEPS = 3_000_000
@@ -33,20 +36,20 @@ CLIP_RANGE = 0.2
 #=======================================================
 #=======================================================
 
-def Test(cluster = True, train = False, test = True, model_path = None, checkpoint_freq = 10, train_params = None):
+def Test(run_cluster = True, run_train = False, run_test = True, model_path = None, checkpoint_freq = 10, train_params = None):
     if not os.path.exists(model_path + ".zip"):
         print(no_model_found_msg := f"Model checkpoint not found at {model_path}.zip. Training a new model.")
-        train = True
+        run_train = True
     if model_path is None:
         print(no_model_path_msg := "No model path provided. Training a new model.")
-        train = True
-    
-    if cluster:
+        run_train = True
+
+    if run_cluster:
         clustering.main() 
-    if train:
+    if run_train:
         train.run_training(model_path=model_path, checkpoint_freq=checkpoint_freq, **train_params)
-    if test:
-        if train == True:
+    if run_test:
+        if run_train == True:
             select_model = input("Enter the model checkpoint you want to test (e.g., 'ppo_driving_13700000_steps'): ")
             select_model = f"model\checkpoints\{select_model}"
         else:
@@ -70,4 +73,4 @@ if __name__ == "__main__":
         "clip_range": CLIP_RANGE
     }
 
-    Test(cluster=False, train=False, test=True, model_path=MODEL_PATH, checkpoint_freq=CHECKPOINT_FREQ, train_params=train_params)
+    Test(run_cluster=RUN_CLUSTER, run_train=RUN_TRAIN, run_test=RUN_TEST, model_path=MODEL_PATH, checkpoint_freq=CHECKPOINT_FREQ, train_params=train_params)
