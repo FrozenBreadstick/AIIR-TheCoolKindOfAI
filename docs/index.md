@@ -68,7 +68,9 @@ Example command with all arguments specified:
 python src\main.py pointclouds/1/Denoise_NoVeg_Subsampled.laz        
 ```
 
+When a newly trained model will be saved in the "model/" folder.
 
+To adjust the training values and generally configure the system please modify the "GLOBAL CONFIGURATION PARAMETERS" from the "main.py" file
 ---
 
 ## Demo Video
