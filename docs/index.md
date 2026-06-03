@@ -65,8 +65,9 @@ See below for a list of parameters:
 TODO ADD TO HERE FOR ALL ARGUMENTS THAT EXIST
 Example command with all arguments specified:
 ```bash
-python .\src\main.py --path "pointclouds/1/Denoise_NoVeg_Subsampled.laz"
+python src\main.py pointclouds/1/Denoise_NoVeg_Subsampled.laz        
 ```
+
 
 ---
 

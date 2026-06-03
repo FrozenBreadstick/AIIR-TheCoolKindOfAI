@@ -13,9 +13,10 @@ import test
 #=======================================================
 
 # General Configuration - Mandatory
-RUN_CLUSTER = False # Whether to run the clustering script before training/testing. Set to False if you have already run it and have the necessary files in place.
+RUN_CLUSTER = True # Whether to run the clustering script before training/testing. Set to False if you have already run it and have the necessary files in place.
 RUN_TRAIN = True # Whether to run the training process. Set to False if you only
 RUN_TEST = True # Whether to run the testing process. Set to False if you only want to train a model without testing it immediately after.
+
 CHECKPOINT_FREQ = 40 # Checkpoint frequency in terms of how many goals spawn in the environment (not PPO update steps)
 MODEL_PATH = "tensor_data/ppo39.40_137/ppo_driving_13700000_steps" # if you ONLY testing a model, include the relative model path you would like to test. Otherwise if you are training a model include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
 
