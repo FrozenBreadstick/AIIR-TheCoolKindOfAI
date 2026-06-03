@@ -38,8 +38,16 @@ Point cloud segmentation is conducted through a 3 step process:
 
 # API Reference
 
+## clustering.py
+### main
+::: clustering.main
+### load_laz
 ::: clustering.load_laz
-
-Change
-
-Change 2 Electric Boogaloo
+### visualize
+::: clustering.visualize
+### DavidBentleyScan
+::: clustering.DavidBentleyScan
+### FelicityRandomForest
+::: clustering.FelicityRandomForest
+### CericCentroid
+::: clustering.CedricCentroid
