@@ -20,7 +20,7 @@ CHECKPOINT_FREQ = 40 # Checkpoint frequency in terms of how many goals spawn in 
 MODEL_PATH = "tensor_data/ppo39.40_137/ppo_driving_13700000_steps" # if you ONLY testing a model, include the relative model path you would like to test. Otherwise if you are training a model include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
 
 # Train - Training Configuration Parameters
-TOTAL_TIMESTEPS = 3_000_000
+TOTAL_TIMESTEPS = 2
 N_ENVS = 8
 N_STEPS = 1024
 BATCH_SIZE = 512
@@ -45,16 +45,15 @@ def Test(run_cluster = True, run_train = False, run_test = True, model_path = No
         run_train = True
 
     if run_cluster:
-        clustering.main() 
+        data_path = clustering.main() 
+    else:
+        data_path = "pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"
     if run_train:
-        train.run_training(model_path=model_path, checkpoint_freq=checkpoint_freq, **train_params)
+        latest_model = train.run_training(model_path=model_path, data_path=data_path, checkpoint_freq=checkpoint_freq, **train_params)
+    else:
+        latest_model = model_path
     if run_test:
-        if run_train == True:
-            select_model = input("Enter the model checkpoint you want to test (e.g., 'ppo_driving_13700000_steps'): ")
-            select_model = f"model\checkpoints\{select_model}"
-        else:
-            select_model = model_path
-        test.test_policy(checkpoint_freq=checkpoint_freq, model_path=select_model)
+        test.test_policy(checkpoint_freq=checkpoint_freq, model_path=latest_model, data_path=data_path)
 
 
 if __name__ == "__main__":

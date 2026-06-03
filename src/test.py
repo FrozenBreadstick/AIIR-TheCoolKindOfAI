@@ -6,11 +6,19 @@ import simple_driving
 import time
 from train import custom_reward, custom_observation
 
-def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_driving_13700000_steps"):
+def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_driving_13700000_steps", data_path = "pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"):
+    """
+    The Test function that loads a saved PPO model, launches a testing environment, and allows a user to evaluate its performance.
+    
+    Parameters:
+    checkpoint_freq (int): The frequency at which goals spawn in the environment
+    model_path (str): The relative path to the saved PPO model checkpoint (without the .zip extension)
+    data_path (str): The relative path to the point cloud data file
+    """
     print("Loading saved PPO model...")
 
     print("Loading environment with rendering enabled...")
-    env = gym.make("SimpleDriving-v0", checkpoint_frequency=checkpoint_freq, renders=True, isDiscrete=False, reward_callback=custom_reward, observation_callback=custom_observation, environment_map=r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz")
+    env = gym.make("SimpleDriving-v0", checkpoint_frequency=checkpoint_freq, renders=True, isDiscrete=False, reward_callback=custom_reward, observation_callback=custom_observation, environment_map=data_path)
     #model.set_env(env)
     model_path = model_path if model_path.endswith(".zip") else model_path + ".zip"
     model = PPO.load(model_path, env=env)
@@ -36,4 +44,4 @@ def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_drivin
     env.close()
 
 if __name__ == "__main__":
-    test_policy(checkpoint_freq=40, model_path="model\checkpoints\ppo_driving_13700000_steps.zip")
+    test_policy(checkpoint_freq=40, model_path="model\checkpoints\ppo_driving_13700000_steps.zip", data_path="pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz")

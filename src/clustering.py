@@ -239,7 +239,7 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
     print("Centroids and Bounds Found")
     return np.array(centroids), np.array(metrics)
 
-def main() -> None:
+def main() -> str:
     """
     The main function that runs all the necessary components to run the Point Cloud segmentation workflow.
     """
@@ -262,7 +262,10 @@ def main() -> None:
     #Find Centroids and Bounds
     CedricCentroid(points, cluster_labels, filename)
     visualize(filename)
-    return
+
+    final_filename = filename + "_centroid.npz"
+    print(f"Final centroids and bounds saved to {final_filename}")
+    return final_filename
 
 if __name__ == "__main__":
     main()

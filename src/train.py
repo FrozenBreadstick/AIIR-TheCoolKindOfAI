@@ -121,14 +121,33 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
 # ========================================================
 
 # You can change these variables for more training steps or if you have a powerful CPU:
-def run_training(checkpoint_freq, model_path, total_timesteps, n_envs, n_steps, batch_size, n_epochs, learning_rate, entropy_coef, gae_lambda, gamma, max_grad_norm, clip_range) -> None:
+def run_training(checkpoint_freq, model_path, total_timesteps, n_envs, n_steps, batch_size, n_epochs, learning_rate, entropy_coef, gae_lambda, gamma, max_grad_norm, clip_range, data_path="pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz") -> str:
+    """
+    The Training function that sets up the environment and trains either a new PPO model or loads an existing one to build upon.
+    
+    Parameters:
+    checkpoint_freq (int): The frequency at which goals spawn in the environment
+    model_path (str): The relative path to the saved PPO model checkpoint (without the .zip extension)
+    data_path (str): The relative path to the point cloud data file
+    total_timesteps (int): The total number of timesteps to train for
+    n_envs (int): The number of parallel environments to use for training
+    n_steps (int): The number of steps to run in each environment per update
+    batch_size (int): The batch size for training
+    n_epochs (int): The number of epochs to train on each update
+    learning_rate (float): The learning rate for the PPO optimizer
+    entropy_coef (float): The coefficient for the PPO entropy bonus
+    gae_lambda (float): The lambda parameter for Generalized Advantage Estimation
+    gamma (float): The discount factor for rewards
+    max_grad_norm (float): The maximum norm for gradient clipping
+    clip_range (float): The clipping range for PPO's policy updates
+    """
     env_kwargs = {
         "checkpoint_frequency": checkpoint_freq,
         "renders": False,
         "isDiscrete": False,
         "reward_callback": custom_reward,
         "observation_callback": custom_observation,
-        "environment_map": r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz"
+        "environment_map": data_path
     }
     env = make_vec_env(
         "SimpleDriving-v0",
@@ -189,10 +208,14 @@ def run_training(checkpoint_freq, model_path, total_timesteps, n_envs, n_steps, 
         reset_num_timesteps=not os.path.exists(model_path + ".zip"),
     )
 
+    model_step_count = ppo_agent.num_timesteps
+
     os.makedirs("model", exist_ok=True)
-    ppo_agent.save(model_path)
+    ppo_agent.save("model/ppo_driving_{}_steps".format(model_step_count))
     env.save(os.path.join("model", "vecnormalize.pkl"))
-    print(f"Agent saved to {model_path}.zip and VecNormalize stats saved to model/vecnormalize.pkl")
+    print(f"Agent saved to model/ppo_driving_{model_step_count}_steps.zip and VecNormalize stats saved to model/vecnormalize.pkl")
+
+    return ("model/ppo_driving_{}_steps".format(model_step_count))
 
 if __name__ == "__main__":
     run_training()
