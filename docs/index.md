@@ -51,7 +51,9 @@ To run the full system, run the main.py script from terminal after activating th
 ```bash
 python .\src\main.py
 ```
+
 See below for a list of parameters:
+
 | **Parameter** | **Type** | **Description** | **Default** |
 | :--- | :--- | :--- | :--- |
 | --path | string | The filepath of the PointCloud laz file to use. | ```"pointclouds/1/Denoise_NoVeg_Subsampled.laz"``` |
@@ -93,6 +95,22 @@ After this, a small bit of logic is run in order to determine the bounds of each
 ---
 
 ## Usage Guide
+
+The clustering methodology can be run standalone using the following:
+```bash
+python .\src\clustering.py
+```
+
+See below for a list of parameters:
+
+| **Parameter** | **Type** | **Description** | **Default** |
+| :--- | :--- | :--- | :--- |
+| --path | string | The filepath of the PointCloud laz file to use. | ```"pointclouds/1/Denoise_NoVeg_Subsampled.laz"``` |
+
+Example command:
+```bash
+python .\src\clustering.py --path "pointclouds/1/Denoise_NoVeg_Subsampled.laz"
+```
 
 <hr style="border: 5px solid #c20000d7;">
 
