@@ -1,3 +1,15 @@
+# AI Point Cloud Segmentation, Dynamic Environment Spawning, and Automatic Car Driving
+
+For AI In Robotics
+By Connor McGannon, Mattia Candotti, and Ayberk Yetkin
+
+
+## Point Cloud Segmentation
+
+Point cloud segmentation is conducted through a 3 step process:
+
+
+
 # Heading 1
 ## Heading 2
 **Bold Text** and *Italic Text*

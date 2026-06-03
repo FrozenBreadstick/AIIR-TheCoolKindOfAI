@@ -13,14 +13,14 @@ from sklearn.ensemble import RandomForestClassifier
 # We are using Laz cus it is more storage space efficient. Laz v1.4 (Point Format 0)
 def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]]:
     """
-    For loading in .laz files
+    For loading in .laz files. Called in the main function.
     
     Args:
-        path: str -> path to the file to be loaded
-        filename: str -> the filename to check for if we have already loaded that file before (for efficiency)
+        path: Path to the file to be loaded
+        filename: The filename to check for if we have already loaded that file before (for efficiency)
 
     Returns:
-        Tuple -> contains an array of points, and an array of ground truth labels (if they exist)
+        Contains an array of points, and an array of ground truth labels (if they exist)
     """
     print("Loading Points")
     percicus = None
@@ -51,7 +51,13 @@ def load_laz(path: str, filename: str) -> Tuple[np.ndarray, Optional[np.ndarray]
 
 def visualize(filename: str) -> None:
     """
-    
+    Visualises every stage of Point Cloud Processing workflow in Polyscope. Called by the main function
+
+    Args:
+        filename: The name of the file to load
+
+    Returns:
+        None
     """
     print("Visualizing results in Polyscope...")
     ps.init()
@@ -111,6 +117,17 @@ def visualize(filename: str) -> None:
 
 # DBSCAN clusterer
 def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.ndarray:
+    """
+    Conducts DBSCAN to cluster points into individual buildings. Called by the main functon.
+
+    Args:
+        points: Array of XY positions of all points in the Point Cloud
+        gts: Array of ground truth labels for each point in the Point Cloud (Floor vs Building)
+        filename: The filename to load from or save to
+
+    Returns:
+        An array of labels segmenting the buildings apart
+    """
     print("Starting Clustering")
     print("Stripping Ground for XY Clustering")
     start = time.time()
@@ -136,6 +153,18 @@ def DavidBentleyScan(points: np.ndarray, gts: np.ndarray, filename: str) -> np.n
 
 # Need to switch to training on 80%, testing on 20% or some other split
 def FelicityRandomForest(points: np.ndarray, gts: np.ndarray, filename: str) -> np.ndarray:
+    """
+    Runs Random Forest classification on a set of points in a Point Cloud. Called by the main function.
+
+    Args:
+        points: An array of all points in the point cloud
+        gts: An array of all ground truths in the point cloud
+        filename: The filename to load from or save to
+
+    Returns:
+        An array corresponding to the predictions from the RandomForestClassifier
+    
+    """
     print("Starting Forest Classification")
     felicity = None
     start = time.time()
@@ -156,6 +185,15 @@ def FelicityRandomForest(points: np.ndarray, gts: np.ndarray, filename: str) -> 
     return felicity
 
 def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Calculates the centroids and approximate bounds of each building cluster to return as an array for spawning in simulation. Called by the main function.
+
+    Args:
+        points: An array of all points in the Point Cloud
+        cluster_labels: An array of all labels that provide the clusters for the building points
+        filename: The filename to load from or save to 
+    """
+
     print("Starting Centroid & Bounds Calculations")
     centroids = []
     metrics = []
@@ -202,6 +240,9 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
     return np.array(centroids), np.array(metrics)
 
 def main() -> None:
+    """
+    The main function that runs all the necessary components to run the Point Cloud segmentation workflow.
+    """
     parser = argparse.ArgumentParser(description="Point Cloud Processing for Identifying Buildings")
     parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
     args = parser.parse_args()
