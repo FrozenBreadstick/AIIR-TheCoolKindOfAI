@@ -14,7 +14,7 @@ import test
 
 # Test/Train - Checkpoint and Model Configuration
 CHECKPOINT_FREQ = 40 # Checkpoint frequency in terms of how many goals spawn in the environment (not PPO update steps)
-MODEL_PATH = "model\checkpoints\ppo_driving_10700000_steps" # if you ONLY testing a model, include the relative model path you would like to test. Otherwise if you are training a model include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
+MODEL_PATH = "tensor\ppo39.40_137\ppo_driving_10700000_steps" # if you ONLY testing a model, include the relative model path you would like to test. Otherwise if you are training a model include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
 
 # Train - Training Configuration Parameters
 TOTAL_TIMESTEPS = 3_000_000
