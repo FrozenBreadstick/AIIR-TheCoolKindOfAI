@@ -37,8 +37,9 @@ This system trains a car to travel from one side of a city map to the other by f
     </p>
   </div>
 </div>
-
+<p style="margin-top: 8px; font-size: 0.95em;">
 For a full demonstration of the system from start to end see "Demo Video".
+</p>
 ---
 
 ## Installation and Setup
