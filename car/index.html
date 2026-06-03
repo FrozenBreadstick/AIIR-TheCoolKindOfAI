@@ -1,0 +1,608 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../environment/">
+      
+      
+        <link rel="next" href="../api/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Agent - Automated City Mapping and Car Driving</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ai-car-training-and-testing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Automated City Mapping and Car Driving" class="md-header__button md-logo" aria-label="Automated City Mapping and Car Driving" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Automated City Mapping and Car Driving
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Automated City Mapping and Car Driving" class="md-nav__button md-logo" aria-label="Automated City Mapping and Car Driving" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Automated City Mapping and Car Driving
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-training-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Training Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-testing-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Testing Works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-and-testing-usage-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Training and Testing Usage Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ai-car-training-and-testing">AI Car Training and Testing</h1>
+<p>The car is trained using <strong>Proximal Policy Optimization (PPO)</strong> via the <a href="https://stable-baselines3.readthedocs.io/">Stable Baselines3</a> library, inside a custom PyBullet simulation environment built from the segmented point cloud data.</p>
+<h2 id="how-training-works">How Training Works</h2>
+<p>Training is handled by <code>train.py</code>, which sets up multiple parallel environments using <code>SubprocVecEnv</code> and runs PPO to learn a driving policy end-to-end.</p>
+<p><strong>Observation Space</strong> — At each step the car receives:</p>
+<ul>
+<li>The relative (x, y) position of the <strong>main goal</strong> in the car's local frame</li>
+<li>The relative (x, y) position of the <strong>nearest checkpoint</strong> in the car's local frame (falls back to the goal position if no checkpoint is active)</li>
+<li>A full array of <strong>normalised LiDAR readings</strong> representing distances to surrounding obstacles
+<strong>Reward Function</strong> — The reward signal is shaped by several components:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Signal</th>
+<th style="text-align: left;">Value</th>
+<th style="text-align: left;">Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Step penalty</td>
+<td style="text-align: left;"><code>-0.2</code></td>
+<td style="text-align: left;">Every timestep (encourages efficiency)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Goal reached</td>
+<td style="text-align: left;"><code>+200.0</code></td>
+<td style="text-align: left;">Car arrives at the main end goal</td>
+</tr>
+<tr>
+<td style="text-align: left;">Checkpoint reached</td>
+<td style="text-align: left;"><code>+150.0</code></td>
+<td style="text-align: left;">Car passes through an intermediate checkpoint</td>
+</tr>
+<tr>
+<td style="text-align: left;">Progress toward goal</td>
+<td style="text-align: left;"><code>+10 x delta_distance</code></td>
+<td style="text-align: left;">Proportional to distance closed per step</td>
+</tr>
+<tr>
+<td style="text-align: left;">Progress toward checkpoint</td>
+<td style="text-align: left;"><code>+10 x delta_distance</code></td>
+<td style="text-align: left;">Proportional to distance closed per step</td>
+</tr>
+<tr>
+<td style="text-align: left;">LiDAR proximity penalty</td>
+<td style="text-align: left;">scaled by <code>-3.0</code></td>
+<td style="text-align: left;">Any LiDAR reading below <code>0.03</code> (close to obstacle)</td>
+</tr>
+<tr>
+<td style="text-align: left;">LiDAR danger penalty</td>
+<td style="text-align: left;">scaled by <code>-12.0</code></td>
+<td style="text-align: left;">Any LiDAR reading below <code>0.02</code> (very close to obstacle)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Collision penalty</td>
+<td style="text-align: left;"><code>-400.0</code></td>
+<td style="text-align: left;">Car physically collides with an obstacle</td>
+</tr>
+</tbody>
+</table>
+<p>Checkpoints spawn along the route at a configurable frequency (<code>checkpoint_freq</code>) to provide dense intermediate rewards that guide the car along the correct path rather than taking shortcuts.</p>
+<p><strong>Model Checkpoints</strong> — During training, the model is saved every 100,000 timesteps (adjusted for the number of parallel environments) to <code>model/checkpoints/</code>. The final model and VecNormalize statistics are saved to <code>model/</code> on completion.</p>
+<div class="admonition note">
+<p class="admonition-title">Resuming Training</p>
+<p>If a model already exists at the specified <code>model_path</code>, training will resume from that checkpoint with any updated hyperparameters applied automatically.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Hardware</p>
+<p>Training runs on CPU by default. GPU acceleration via CUDA is detected and reported at startup but PPO is configured for CPU. Increase <code>n_envs</code> to make better use of multi-core machines.</p>
+</div>
+<hr />
+<h2 id="how-testing-works">How Testing Works</h2>
+<p>Testing is handled by <code>test_policy</code> in <code>test.py</code>. It loads a saved PPO checkpoint, launches a rendering-enabled environment, and runs the car through <strong>three fixed obstacle scenarios</strong> in sequence:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Scenario</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>midpoint</code></td>
+<td style="text-align: left;">Obstacle placed at the midpoint of the route</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>none</code></td>
+<td style="text-align: left;">No obstacles — clean baseline run</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>random_pos</code></td>
+<td style="text-align: left;">Obstacle placed at a random position along the route</td>
+</tr>
+</tbody>
+</table>
+<p>The total accumulated reward for each episode is printed at the end of each scenario, giving a structured evaluation across all required test cases.</p>
+<hr />
+<h2 id="training-and-testing-usage-guide">Training and Testing Usage Guide</h2>
+<p><strong>To train the model</strong>, run via <code>main.py</code>:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src<span class="se">\m</span>ain.py
+</code></pre></div></p>
+<p>Key training parameters are configured via the <code>GLOBAL CONFIGURATION PARAMETERS</code> block in <code>main.py</code>. See the <a href="../#usage-guide">Full System Usage Guide</a> above for the full parameter list.</p>
+<p><strong>To test a saved model</strong>, run <code>test.py</code>:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>src<span class="se">\t</span>est.py
+</code></pre></div></p>
+<p>The model path, point cloud, and checkpoint frequency can be overridden by editing the <code>test_policy()</code> call at the bottom of <code>test.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">test_policy</span><span class="p">(</span>
+    <span class="n">checkpoint_freq</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="o">=</span><span class="s2">&quot;model/checkpoints/ppo_driving_13700000_steps.zip&quot;</span><span class="p">,</span>
+    <span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": "toc.integrate", "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

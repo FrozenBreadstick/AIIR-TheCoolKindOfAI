@@ -1,0 +1,651 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="clustering/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Automated City Mapping and Car Driving</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="stylesheets/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#team" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Automated City Mapping and Car Driving" class="md-header__button md-logo" aria-label="Automated City Mapping and Car Driving" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Automated City Mapping and Car Driving
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Automated City Mapping and Car Driving" class="md-nav__button md-logo" aria-label="Automated City Mapping and Car Driving" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Automated City Mapping and Car Driving
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="clustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="car/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>For AI In Robotics</p>
+<h1 id="team">Team</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Connor McGannon</th>
+<th style="text-align: center;">Mattia Candotti</th>
+<th style="text-align: center;">Ayberk Yetkin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><img alt="Connor" src="media/Connor.jpg" /></td>
+<td style="text-align: center;"><img alt="Mattia" src="media/Mattia.jpg" /></td>
+<td style="text-align: center;"><img alt="Ayberk" src="media/Ayberk.jpg" /></td>
+</tr>
+<tr>
+<td style="text-align: center;">Simulation Design and Setup</td>
+<td style="text-align: center;">Point Cloud Processing</td>
+<td style="text-align: center;">Car Training</td>
+</tr>
+</tbody>
+</table>
+<hr style="border: 5px solid #3f51b5;">
+
+<h1 id="full-system">Full System</h1>
+<p>This system trains a car to travel from one side of a city map to the other by following a few key steps:</p>
+<ol>
+<li>Segments real PointCloud LiDAR data from the NSW Spatial Services (see <a href="clustering/#point-cloud-segmentation">Point Cloud Segmentation</a>)</li>
+<li>Uses that segmented data to construct a simulation environment representing all the buildings (see <a href="environment/#environment-building">Environment Building</a>)</li>
+<li>Trains a robot car to travel from one side of the city to a goal on the other (see <a href="car/#ai-car-training-and-testing">AI Car Training</a>)</li>
+</ol>
+<h2 id="results-of-example-trained-model">Results of Example Trained Model</h2>
+<div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
+  <div style="flex: 1; min-width: 280px;">
+    <h3 style="margin-bottom: 8px;">Car almost clears corner</h3>
+    <video controls width="100%">
+      <source src="media\car_almost_gets_around_corner.mp4" type="video/mp4">
+    </video>
+    <p style="margin-top: 8px; font-size: 0.95em;">
+      In this Video Agent can be seen clearly attempting to drive around the wall to the checkpoint. Unfortunetaly the checkpoint was only just too far away as the agent did eventually hit the wall.
+    </p>
+  </div>
+  <div style="flex: 1; min-width: 280px;">
+    <h3 style="margin-bottom: 8px;">Car successfully clears corner</h3>
+    <video controls width="100%">
+      <source src="media\car_succeeds_around_cornor.mp4" type="video/mp4">
+    </video>
+    <p style="margin-top: 8px; font-size: 0.95em;">
+      In this Video Agent can be seen successfully avoiding a collision with a building that sticks out between the checkpoints. The agent rather than drive straight between the checkpoints avoids the corner of the building and goes on to finish the scenario.
+    </p>
+  </div>
+</div>
+<p style="margin-top: 8px; font-size: 0.95em;">
+</p>
+
+<p>For a full demonstration of the system from start to end see <a href="#demo-video">Demo Video</a></p>
+<hr />
+<h2 id="installation-and-setup">Installation and Setup</h2>
+<div class="admonition note">
+<p class="admonition-title">Python Version</p>
+<p>Ensure python 3.11+ is installed</p>
+</div>
+<ol>
+<li>
+<p>Create a virtual environment:
+<div class="highlight"><pre><span></span><code>py<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+</code></pre></div></p>
+</li>
+<li>
+<p>Activate the virtual environment:
+<div class="highlight"><pre><span></span><code>.<span class="se">\.</span>venv<span class="se">\S</span>cripts<span class="se">\A</span>ctivate.ps1
+</code></pre></div></p>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Usage Note</p>
+<p>The .ps1 script is used for windows, if you are running on another OS, please consult python docs for activating virtual environments</p>
+</div>
+<ol>
+<li>Install the requirements list:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">External Requirement</p>
+<p>To install pybullet (one of the requirements), a C++ compiler must be installed. To use the standard microsoft MSVC compiler, click here: <a href="https://visualstudio.microsoft.com/visual-cpp-build-tools/">Visual C++ Build Tools</a>. When the program launches, install the "Desktop development with C++" package and restart VS code before attempting installation again.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Alternative Method</p>
+<p>This repository comes with a setup script! Run <code>.\setup.ps1</code> in terminal to automatically execute the steps above!</p>
+</div>
+<hr />
+<h2 id="usage-guide">Usage Guide</h2>
+<p>To run the full system, run the main.py script from terminal after activating the virtual environment in the root directory of the repository:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>.<span class="se">\s</span>rc<span class="se">\m</span>ain.py
+</code></pre></div></p>
+<p>See below for a list of parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Parameter</strong></th>
+<th style="text-align: left;"><strong>Type</strong></th>
+<th style="text-align: left;"><strong>Description</strong></th>
+<th style="text-align: left;"><strong>Default</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>--run_cluster</code></td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">Whether to run the clustering script before training/testing.</td>
+<td style="text-align: left;"><code>True</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--run_train</code></td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">Whether to run the training process.</td>
+<td style="text-align: left;"><code>False</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--run_test</code></td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">Whether to run the testing process immediately after.</td>
+<td style="text-align: left;"><code>True</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--checkpoint_freq</code></td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Checkpoint frequency in terms of how many goals spawn in the environment.</td>
+<td style="text-align: left;"><code>30</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--model_path</code></td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Relative path to the model to load, start training from, or test.</td>
+<td style="text-align: left;"><code>"tensor_data\ppo39.30_2\ppo_driving_6700000_steps"</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--laz</code></td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">The filepath of the PointCloud laz file to use.</td>
+<td style="text-align: left;"><code>"pointclouds/1/Denoise_NoVeg_Subsampled.laz"</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--total_timesteps</code></td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Total timesteps for the training process.</td>
+<td style="text-align: left;"><code>2</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--n_envs</code></td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Number of parallel environments to run.</td>
+<td style="text-align: left;"><code>8</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--n_steps</code></td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Number of steps to run per environment before updating.</td>
+<td style="text-align: left;"><code>1024</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--batch_size</code></td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Minibatch size for the optimization.</td>
+<td style="text-align: left;"><code>512</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--n_epochs</code></td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">Number of epochs when optimizing the surrogate loss.</td>
+<td style="text-align: left;"><code>4</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--learning_rate</code></td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">The learning rate of the optimizer.</td>
+<td style="text-align: left;"><code>0.0001</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--entropy_coef</code></td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">Entropy coefficient for the loss calculation.</td>
+<td style="text-align: left;"><code>0.15</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--gae_lambda</code></td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">Factor for trade-off of bias vs variance for Generalized Advantage Estimator.</td>
+<td style="text-align: left;"><code>0.95</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--gamma</code></td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">Discount factor.</td>
+<td style="text-align: left;"><code>0.995</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--max_grad_norm</code></td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">The maximum value for the gradient clipping.</td>
+<td style="text-align: left;"><code>0.3</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--clip_range</code></td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">Clipping parameter for the value function.</td>
+<td style="text-align: left;"><code>0.2</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example command with all arguments specified:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>.<span class="se">\s</span>rc<span class="se">\m</span>ain.py<span class="w"> </span>--run_cluster<span class="w"> </span>True<span class="w"> </span>--run_train<span class="w"> </span>False<span class="w"> </span>--run_test<span class="w"> </span>True<span class="w"> </span>--checkpoint_freq<span class="w"> </span><span class="m">30</span><span class="w"> </span>--model_path<span class="w"> </span><span class="s2">&quot;tensor_data/ppo39.30_2/ppo_driving_6700000_steps&quot;</span><span class="w"> </span>--laz<span class="w"> </span><span class="s2">&quot;pointclouds/1/Denoise_NoVeg_Subsampled.laz&quot;</span><span class="w"> </span>--total_timesteps<span class="w"> </span><span class="m">2</span><span class="w"> </span>--n_envs<span class="w"> </span><span class="m">8</span><span class="w"> </span>--n_steps<span class="w"> </span><span class="m">1024</span><span class="w"> </span>--batch_size<span class="w"> </span><span class="m">512</span><span class="w"> </span>--n_epochs<span class="w"> </span><span class="m">4</span><span class="w"> </span>--learning_rate<span class="w"> </span><span class="m">0</span>.0001<span class="w"> </span>--entropy_coef<span class="w"> </span><span class="m">0</span>.15<span class="w"> </span>--gae_lambda<span class="w"> </span><span class="m">0</span>.95<span class="w"> </span>--gamma<span class="w"> </span><span class="m">0</span>.995<span class="w"> </span>--max_grad_norm<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span>--clip_range<span class="w"> </span><span class="m">0</span>.2<span class="w">      </span>
+</code></pre></div></p>
+<p>The arguments above are all optional, you can use as many or as little as you like. A simple command for running training with defaults, but using a custom laz file would be:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>.<span class="se">\s</span>rc<span class="se">\m</span>ain.py<span class="w"> </span>--laz<span class="w"> </span><span class="s2">&quot;pointclouds/1/Denoise_NoVeg_Subsampled.laz&quot;</span>
+</code></pre></div>
+<p>Newly trained models will be saved in the "model/" folder.</p>
+<p>To adjust the training values and generally configure the system in an easier way please modify the "GLOBAL CONFIGURATION PARAMETERS" from the "main.py" file.</p>
+<hr />
+<h2 id="demo-video">Demo Video</h2>
+<p>Below is a video demonstrating how to run the system and what can be expected when you do</p>
+<video controls width="100%">
+  <source src="media\AIIR-Demo.mp4" type="video/mp4">
+</video>
+
+<p>For more detailed code descriptions please see the <a href="api/#api-reference">API Docs</a> </p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": "toc.integrate", "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

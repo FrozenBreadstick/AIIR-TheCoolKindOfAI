@@ -1,0 +1,3158 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../car/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>API - Automated City Mapping and Car Driving</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Automated City Mapping and Car Driving" class="md-header__button md-logo" aria-label="Automated City Mapping and Car Driving" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Automated City Mapping and Car Driving
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Automated City Mapping and Car Driving" class="md-nav__button md-logo" aria-label="Automated City Mapping and Car Driving" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Automated City Mapping and Car Driving
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clustering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clustering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../car/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#clusteringpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        clustering.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="clustering.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_cluster_main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clustering.main" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        main
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="main">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_laz
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clustering.load_laz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        load_laz
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="load_laz">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_visualise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        visualize
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clustering.visualize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        visualize
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="visualize">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_dbscan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DavidBentleyScan
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clustering.DavidBentleyScan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DavidBentleyScan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DavidBentleyScan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_forest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FelicityRandomForest
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clustering.FelicityRandomForest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FelicityRandomForest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FelicityRandomForest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_centroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CericCentroid
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clustering.CedricCentroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CedricCentroid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trainpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        train.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="train.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_custom_observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        custom_observation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train.custom_observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        custom_observation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="custom_observation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_custom_reward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        custom_reward
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train.custom_reward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        custom_reward
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="custom_reward">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_run_training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_training
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train.run_training" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_training
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test.py
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="test.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_test_policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_policy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test.test_policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test_policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="api-reference">API Reference</h1>
+<hr style="border: 2px solid #0071ea;">
+
+<h2 id="clusteringpy">clustering.py</h2>
+<details class="info">
+<summary>Click to expand this section</summary>
+<h3 id="api_cluster_main">main</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="clustering.main"></a>
+    <div class="doc doc-contents first">
+
+        <p>The main function that runs all the necessary components to run the Point Cloud segmentation workflow.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/clustering.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The main function that runs all the necessary components to run the Point Cloud segmentation workflow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;pointclouds/1/Denoise_NoVeg_Subsampled.laz&quot;</span>
+
+    <span class="c1"># Load Data</span>
+    <span class="n">pat</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">pat</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">pat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.laz&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="c1"># Fix filepath</span>
+    <span class="n">points</span><span class="p">,</span> <span class="n">original_gt_labels</span> <span class="o">=</span> <span class="n">load_laz</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># Classify with RandomForest on a point by point basis</span>
+    <span class="n">predict_gt_labels</span> <span class="o">=</span> <span class="n">FelicityRandomForest</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">original_gt_labels</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># DBSCAN Cluster</span>
+    <span class="n">cluster_labels</span> <span class="o">=</span> <span class="n">DavidBentleyScan</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">predict_gt_labels</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1">#Find Centroids and Bounds</span>
+    <span class="n">CedricCentroid</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">cluster_labels</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">visualize</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="n">final_filename</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_centroid.npz&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final centroids and bounds saved to </span><span class="si">{</span><span class="n">final_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">final_filename</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><hr />
+<h3 id="api_load">load_laz</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="clustering.load_laz"></a>
+    <div class="doc doc-contents first">
+
+        <p>For loading in .laz files. Called in the main function.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the file to be loaded</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>filename</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The filename to check for if we have already loaded that file before (for efficiency)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Tuple">Tuple</span>[<span title="numpy.ndarray">ndarray</span>, <span title="typing.Optional">Optional</span>[<span title="numpy.ndarray">ndarray</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Contains an array of points, and an array of ground truth labels (if they exist)</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/clustering.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_laz</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For loading in .laz files. Called in the main function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: Path to the file to be loaded</span>
+<span class="sd">        filename: The filename to check for if we have already loaded that file before (for efficiency)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Contains an array of points, and an array of ground truth labels (if they exist)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading Points&quot;</span><span class="p">)</span>
+    <span class="n">percicus</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">clarissa</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_ground_truth.npz&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Existing Save Data Exists, Loading...&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_ground_truth.npz&quot;</span><span class="p">)</span>
+        <span class="n">percicus</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;points&quot;</span><span class="p">]</span>
+        <span class="n">clarissa</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gt&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Existing Save&quot;</span><span class="p">)</span>
+        <span class="n">lazarus</span> <span class="o">=</span> <span class="n">laspy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">stanley</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="n">clarissa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">stanley</span><span class="o">.</span><span class="n">get</span><span class="p">)(</span><span class="n">lazarus</span><span class="o">.</span><span class="n">classification</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clarissa</span><span class="p">))</span>
+        <span class="n">percicus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">lazarus</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lazarus</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lazarus</span><span class="o">.</span><span class="n">z</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">min_corner</span> <span class="o">=</span> <span class="n">percicus</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">max_corner</span> <span class="o">=</span> <span class="n">percicus</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span>
+            <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_ground_truth.npz&quot;</span><span class="p">,</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="n">percicus</span><span class="p">,</span>
+            <span class="n">gt</span> <span class="o">=</span> <span class="n">clarissa</span><span class="p">,</span>
+            <span class="nb">min</span> <span class="o">=</span> <span class="n">min_corner</span><span class="p">,</span>
+            <span class="nb">max</span> <span class="o">=</span> <span class="n">max_corner</span>
+        <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">percicus</span><span class="p">)</span><span class="si">}</span><span class="s2"> points from </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">percicus</span><span class="p">,</span> <span class="n">clarissa</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><hr />
+<h3 id="api_visualise">visualize</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="clustering.visualize"></a>
+    <div class="doc doc-contents first">
+
+        <p>Visualises every stage of Point Cloud Processing workflow in Polyscope. Called by the main function</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>filename</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the file to load</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>None</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/clustering.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">visualize</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visualises every stage of Point Cloud Processing workflow in Polyscope. Called by the main function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: The name of the file to load</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Visualizing results in Polyscope...&quot;</span><span class="p">)</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">set_up_dir</span><span class="p">(</span><span class="s2">&quot;z_up&quot;</span><span class="p">)</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">set_ground_plane_mode</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+
+    <span class="n">point_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_ground_truth.npz&quot;</span><span class="p">)</span>
+    <span class="n">gt_points</span> <span class="o">=</span> <span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;points&quot;</span><span class="p">]</span>
+    <span class="n">gt_labels</span> <span class="o">=</span> <span class="n">point_data</span><span class="p">[</span><span class="s2">&quot;gt&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Point cloud</span>
+    <span class="n">cloud</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">register_point_cloud</span><span class="p">(</span><span class="s2">&quot;City Point Cloud&quot;</span><span class="p">,</span> <span class="n">gt_points</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+    <span class="n">cloud</span><span class="o">.</span><span class="n">set_point_render_mode</span><span class="p">(</span><span class="s2">&quot;quad&quot;</span><span class="p">)</span>
+    <span class="n">cloud</span><span class="o">.</span><span class="n">add_scalar_quantity</span><span class="p">(</span><span class="s2">&quot;Elevation&quot;</span><span class="p">,</span> <span class="n">gt_points</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Ground truth</span>
+    <span class="n">cloud</span><span class="o">.</span><span class="n">add_scalar_quantity</span><span class="p">(</span><span class="s2">&quot;Raw GT&quot;</span><span class="p">,</span> <span class="n">gt_labels</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Classifier Predictions</span>
+    <span class="n">prediction_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_classified.npy&quot;</span><span class="p">)</span>
+    <span class="n">cloud</span><span class="o">.</span><span class="n">add_scalar_quantity</span><span class="p">(</span><span class="s2">&quot;Predictions&quot;</span><span class="p">,</span> <span class="n">prediction_labels</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Cluster Labels</span>
+    <span class="n">cluster_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_cluster_labels.npy&quot;</span><span class="p">)</span>
+    <span class="n">cloud</span><span class="o">.</span><span class="n">add_scalar_quantity</span><span class="p">(</span><span class="s2">&quot;Clusters&quot;</span><span class="p">,</span> <span class="n">cluster_labels</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#Centroids &amp; Bounds</span>
+    <span class="n">centroid_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_centroid.npz&quot;</span><span class="p">)</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="n">centroid_data</span><span class="p">[</span><span class="s2">&quot;centroids&quot;</span><span class="p">]</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">centroid_data</span><span class="p">[</span><span class="s2">&quot;metrics&quot;</span><span class="p">]</span>
+    <span class="n">centroids3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">centroids</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">centroids</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">90.0</span><span class="p">)])</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">register_point_cloud</span><span class="p">(</span><span class="s2">&quot;Cluster Centers&quot;</span><span class="p">,</span> <span class="n">centroids3</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">all_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1">#connect each set of points</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+        <span class="c1">#m is stored as [north, east, south, west]</span>
+        <span class="n">quad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">quad3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">quad</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">90.0</span><span class="p">)])</span>
+        <span class="n">all_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">quad3</span><span class="p">)</span>
+        <span class="n">all_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edges</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="mi">4</span>
+    <span class="n">all_nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">all_nodes</span><span class="p">)</span>
+    <span class="n">all_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">all_edges</span><span class="p">)</span>
+
+    <span class="n">ps</span><span class="o">.</span><span class="n">register_curve_network</span><span class="p">(</span><span class="s2">&quot;Building Boundaries&quot;</span><span class="p">,</span> <span class="n">all_nodes</span><span class="p">,</span> <span class="n">all_edges</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.0015</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ps</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><hr />
+<h3 id="api_dbscan">DavidBentleyScan</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="clustering.DavidBentleyScan"></a>
+    <div class="doc doc-contents first">
+
+        <p>Conducts DBSCAN to cluster points into individual buildings. Called by the main functon.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>points</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Array of XY positions of all points in the Point Cloud</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>gts</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Array of ground truth labels for each point in the Point Cloud (Floor vs Building)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>filename</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The filename to load from or save to</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array of labels segmenting the buildings apart</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/clustering.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">DavidBentleyScan</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gts</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Conducts DBSCAN to cluster points into individual buildings. Called by the main functon.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        points: Array of XY positions of all points in the Point Cloud</span>
+<span class="sd">        gts: Array of ground truth labels for each point in the Point Cloud (Floor vs Building)</span>
+<span class="sd">        filename: The filename to load from or save to</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An array of labels segmenting the buildings apart</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting Clustering&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stripping Ground for XY Clustering&quot;</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">b_points</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">gts</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_cluster_labels.npy&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Existing Save Data Exists, Loading...&quot;</span><span class="p">)</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_cluster_labels.npy&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Existing Save&quot;</span><span class="p">)</span>
+        <span class="n">henry</span> <span class="o">=</span> <span class="n">hdbscan</span><span class="o">.</span><span class="n">HDBSCAN</span><span class="p">(</span>
+            <span class="n">min_cluster_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">min_samples</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">cluster_selection_epsilon</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">core_dist_n_jobs</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">cluster_labels</span> <span class="o">=</span> <span class="n">henry</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">b_points</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">labels</span><span class="p">[</span><span class="n">gts</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cluster_labels</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_cluster_labels.npy&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clustering Complete in:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">labels</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><hr />
+<h3 id="api_forest">FelicityRandomForest</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="clustering.FelicityRandomForest"></a>
+    <div class="doc doc-contents first">
+
+        <p>Runs Random Forest classification on a set of points in a Point Cloud. Called by the main function.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>points</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array of all points in the point cloud</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>gts</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array of all ground truths in the point cloud</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>filename</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The filename to load from or save to</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array corresponding to the predictions from the RandomForestClassifier</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/clustering.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">FelicityRandomForest</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gts</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs Random Forest classification on a set of points in a Point Cloud. Called by the main function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        points: An array of all points in the point cloud</span>
+<span class="sd">        gts: An array of all ground truths in the point cloud</span>
+<span class="sd">        filename: The filename to load from or save to</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An array corresponding to the predictions from the RandomForestClassifier</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting Forest Classification&quot;</span><span class="p">)</span>
+    <span class="n">felicity</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_classified.npy&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Existing Save Data Exists, Loading...&quot;</span><span class="p">)</span>
+        <span class="n">felicity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_classified.npy&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Existing Save&quot;</span><span class="p">)</span>
+        <span class="n">felix</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+            <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">felix</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">gts</span><span class="p">)</span>
+        <span class="n">felicity</span> <span class="o">=</span> <span class="n">felix</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_classified.npy&quot;</span><span class="p">,</span> <span class="n">felicity</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Classifying Complete in: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; seconds&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">felicity</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><hr />
+<h3 id="api_centroid">CericCentroid</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="clustering.CedricCentroid"></a>
+    <div class="doc doc-contents first">
+
+        <p>Calculates the centroids and approximate bounds of each building cluster to return as an array for spawning in simulation. Called by the main function.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>points</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array of all points in the Point Cloud</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>cluster_labels</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array of all labels that provide the clusters for the building points</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>filename</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The filename to load from or save to</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/clustering.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">CedricCentroid</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cluster_labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the centroids and approximate bounds of each building cluster to return as an array for spawning in simulation. Called by the main function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        points: An array of all points in the Point Cloud</span>
+<span class="sd">        cluster_labels: An array of all labels that provide the clusters for the building points</span>
+<span class="sd">        filename: The filename to load from or save to </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting Centroid &amp; Bounds Calculations&quot;</span><span class="p">)</span>
+    <span class="n">centroids</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">maximum</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_centroid.npz&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Existing Save Data Exists, Loading...&quot;</span><span class="p">)</span>
+        <span class="n">cedric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_centroid.npz&quot;</span><span class="p">)</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="n">cedric</span><span class="p">[</span><span class="s2">&quot;centroids&quot;</span><span class="p">]</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="n">cedric</span><span class="p">[</span><span class="s2">&quot;metrics&quot;</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_ground_truth.npz&quot;</span><span class="p">)</span>
+        <span class="n">minimum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span>
+        <span class="n">maximum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Existing Save&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">cluster_labels</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">cluster_points</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">cluster_labels</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
+            <span class="n">centroid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cluster_points</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">pts</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="c1">#cardinal extreme points, general shape representing building</span>
+            <span class="n">north</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])]</span>
+            <span class="n">south</span> <span class="o">=</span> <span class="n">cluster_points</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])]</span>
+            <span class="n">east</span>  <span class="o">=</span> <span class="n">cluster_points</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])]</span>
+            <span class="n">west</span>  <span class="o">=</span> <span class="n">cluster_points</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])]</span>
+
+            <span class="n">centroids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">centroid</span><span class="p">)</span>
+            <span class="n">metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">north</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">east</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">south</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">west</span><span class="p">[:</span><span class="mi">2</span><span class="p">]]))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_ground_truth.npz&quot;</span><span class="p">)</span>
+        <span class="n">minimum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span>
+        <span class="n">maximum</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span>
+            <span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_centroid.npz&quot;</span><span class="p">,</span>
+            <span class="n">centroids</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">centroids</span><span class="p">),</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metrics</span><span class="p">),</span>
+            <span class="nb">min</span> <span class="o">=</span> <span class="n">minimum</span><span class="p">,</span>
+            <span class="nb">max</span> <span class="o">=</span> <span class="n">maximum</span>
+        <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Centroids and Bounds Found&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">centroids</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div></details>
+<hr style="border: 2px solid #0071ea;">
+<hr style="border: 2px solid #ff53fc90;">
+
+<h2 id="trainpy">train.py</h2>
+<details class="info">
+<summary>Click to expand this section</summary>
+<h3 id="api_custom_observation">custom_observation</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="train.custom_observation"></a>
+    <div class="doc doc-contents first">
+
+        <p>Constructs the custom observation array for the environment.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>client</code>
+            </td>
+            <td>
+                  <code><span title="pybullet_utils.bullet_client.BulletClient">BulletClient</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Active PyBullet physics client used for coordinate transforms</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>car_pos</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Current world-space position of the car <code>(x, y, z)</code></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>car_orn</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Current world-space orientation of the car as a quaternion</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>goal_pos_1</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>World-space position of the primary end goal</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>goal_orn_1</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>World-space orientation of the primary end goal</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>checkpoint_pos</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>World-space position of the active checkpoint, or <code>None</code> if no checkpoint is active</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>checkpoint_orn</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>World-space orientation of the active checkpoint</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>lidar_readings</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Raw normalised LiDAR distances from the car to surrounding obstacles</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A flat observation array of shape <code>(4 + N,)</code> where the first 4 elements are the relative (x, y) positions of the goal and checkpoint in the car's local frame, and the remaining N elements are the LiDAR readings.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/train.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_observation</span><span class="p">(</span>
+    <span class="n">client</span><span class="p">:</span> <span class="n">bc</span><span class="o">.</span><span class="n">BulletClient</span><span class="p">,</span>
+    <span class="n">car_pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">car_orn</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">goal_pos_1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">goal_orn_1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">checkpoint_pos</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">checkpoint_orn</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">lidar_readings</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constructs the custom observation array for the environment.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        client: Active PyBullet physics client used for coordinate transforms</span>
+<span class="sd">        car_pos: Current world-space position of the car `(x, y, z)`</span>
+<span class="sd">        car_orn: Current world-space orientation of the car as a quaternion</span>
+<span class="sd">        goal_pos_1: World-space position of the primary end goal</span>
+<span class="sd">        goal_orn_1: World-space orientation of the primary end goal</span>
+<span class="sd">        checkpoint_pos: World-space position of the active checkpoint, or `None` if no checkpoint is active</span>
+<span class="sd">        checkpoint_orn: World-space orientation of the active checkpoint</span>
+<span class="sd">        lidar_readings: Raw normalised LiDAR distances from the car to surrounding obstacles</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A flat observation array of shape `(4 + N,)` where the first 4 elements are the relative (x, y) positions of the goal and checkpoint in the car&#39;s local frame, and the remaining N elements are the LiDAR readings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">observation</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="c1"># placeholder for relative goal position (x, y) of the 3 goals</span>
+
+    <span class="k">if</span> <span class="n">checkpoint_pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">checkpoint_pos</span> <span class="o">=</span> <span class="n">goal_pos_1</span>  <span class="c1"># if no checkpoint, use goal position as dummy</span>
+        <span class="n">checkpoint_orn</span> <span class="o">=</span> <span class="n">goal_orn_1</span>
+
+    <span class="c1"># invert car transform</span>
+    <span class="n">inv_car_pos</span><span class="p">,</span> <span class="n">inv_car_orn</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">invertTransform</span><span class="p">(</span><span class="n">car_pos</span><span class="p">,</span> <span class="n">car_orn</span><span class="p">)</span>
+
+    <span class="c1"># relative goal position</span>
+    <span class="n">rel_goal_pos_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">multiplyTransforms</span><span class="p">(</span><span class="n">inv_car_pos</span><span class="p">,</span> <span class="n">inv_car_orn</span><span class="p">,</span> <span class="n">goal_pos_1</span><span class="p">,</span> <span class="n">goal_orn_1</span><span class="p">)</span>
+
+    <span class="n">rel_checkpoint_pos</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">multiplyTransforms</span><span class="p">(</span>
+        <span class="n">inv_car_pos</span><span class="p">,</span> <span class="n">inv_car_orn</span><span class="p">,</span>
+        <span class="n">checkpoint_pos</span><span class="p">,</span> <span class="n">checkpoint_orn</span>
+    <span class="p">)</span>
+
+    <span class="n">observation</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel_goal_pos_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">observation</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel_goal_pos_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">observation</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel_checkpoint_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">observation</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">rel_checkpoint_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># normalise lidar to [0, 1]</span>
+    <span class="c1"># lidar_readings = lidar_readings / 100.0</span>
+    <span class="c1"># convert LiDAR readings to relative positions of detected obstacles in the car&#39;s local frame</span>
+    <span class="c1"># (assuming lidar_readings are distances at fixed angles around the car)</span>
+    <span class="c1"># lidar_positions = []</span>
+    <span class="c1"># for i, distance in enumerate(lidar_readings):</span>
+    <span class="c1">#     angle = 2 * math.pi * i / len(lidar_readings)  # angle of this LiDAR ray</span>
+    <span class="c1">#     x = 100 * distance * math.cos(angle)  # convert polar to Cartesian coordinates</span>
+    <span class="c1">#     y = 100 * distance * math.sin(angle)</span>
+    <span class="c1">#     lidar_positions.append(x)  # add both x and y to the observation</span>
+    <span class="c1">#     lidar_positions.append(y)</span>
+
+    <span class="c1"># lidar_positions = np.array(lidar_positions, dtype=np.float32)</span>
+
+    <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">observation</span><span class="p">,</span> <span class="n">lidar_readings</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+
+    <span class="k">return</span> <span class="n">observation</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code>checkpoint_pos</code> is <code>None</code>, the goal position is used as a dummy checkpoint value so the observation shape stays consistent.</p>
+</div>
+<hr />
+<h3 id="api_custom_reward">custom_reward</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="train.custom_reward"></a>
+    <div class="doc doc-contents first">
+
+        <p>Calculates the environment reward for the current step.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>car_pos</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Current world-space position of the car</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>goal_pos_1</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>World-space position of the primary end goal</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>checkpoint_pos</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>World-space position of the active checkpoint</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>lidar_readings</code>
+            </td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Normalised LiDAR distances (same as passed to <code>custom_observation</code>)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>prev_dist_to_goal_1</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Distance to the goal at the previous step</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>prev_dist_to_checkpoint</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Distance to the checkpoint at the previous step</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dist_to_goal_1</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Distance to the goal at the current step</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dist_to_checkpoint</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Distance to the checkpoint at the current step, or <code>None</code> if inactive</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reached_goal_1</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the car reached the primary goal this step</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reached_checkpoint</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the car reached the active checkpoint this step</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>collided</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the car collided with an obstacle this step</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The total scalar reward for this step.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/train.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">custom_reward</span><span class="p">(</span>
+    <span class="n">car_pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">goal_pos_1</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">checkpoint_pos</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">lidar_readings</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">prev_dist_to_goal_1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prev_dist_to_checkpoint</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dist_to_goal_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">dist_to_checkpoint</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reached_goal_1</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">reached_checkpoint</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">collided</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the environment reward for the current step.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        car_pos: Current world-space position of the car</span>
+<span class="sd">        goal_pos_1: World-space position of the primary end goal</span>
+<span class="sd">        checkpoint_pos: World-space position of the active checkpoint</span>
+<span class="sd">        lidar_readings: Normalised LiDAR distances (same as passed to `custom_observation`)</span>
+<span class="sd">        prev_dist_to_goal_1: Distance to the goal at the previous step</span>
+<span class="sd">        prev_dist_to_checkpoint: Distance to the checkpoint at the previous step</span>
+<span class="sd">        dist_to_goal_1: Distance to the goal at the current step</span>
+<span class="sd">        dist_to_checkpoint: Distance to the checkpoint at the current step, or `None` if inactive</span>
+<span class="sd">        reached_goal_1: Whether the car reached the primary goal this step</span>
+<span class="sd">        reached_checkpoint: Whether the car reached the active checkpoint this step</span>
+<span class="sd">        collided: Whether the car collided with an obstacle this step</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The total scalar reward for this step.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reward</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># step penalty</span>
+    <span class="n">reward</span> <span class="o">+=</span> <span class="n">STEP_PENALTY</span>
+
+    <span class="c1"># reward for making progress toward the goals, calculated as the change in distance to each goal since the last step</span>
+    <span class="c1"># big reward for reaching the goal small for on the way</span>
+    <span class="k">if</span> <span class="n">reached_goal_1</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">GOAL_REWARD_1</span>
+    <span class="k">elif</span> <span class="n">prev_dist_to_goal_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dist_to_checkpoint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">PROGRESS_REWARD_SCALE_1</span> <span class="o">*</span> <span class="p">(</span><span class="n">prev_dist_to_goal_1</span> <span class="o">-</span> <span class="n">dist_to_goal_1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">reached_checkpoint</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">GOAL_REWARD_2</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">dist_to_checkpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+          <span class="ow">and</span> <span class="n">prev_dist_to_checkpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">PROGRESS_REWARD_SCALE_2</span> <span class="o">*</span> <span class="p">(</span><span class="n">prev_dist_to_checkpoint</span> <span class="o">-</span> <span class="n">dist_to_checkpoint</span><span class="p">)</span>
+
+
+    <span class="c1"># ---- wall / obstacle avoidance via lidar ----</span>
+    <span class="c1"># normalised_lidar = lidar_readings / 100 # already normalised</span>
+    <span class="n">min_lidar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lidar_readings</span><span class="p">)</span>
+    <span class="c1"># print(f&quot;Minimum LiDAR reading: {min_lidar:.3f}&quot;)</span>
+
+    <span class="k">if</span> <span class="n">min_lidar</span> <span class="o">&lt;</span> <span class="n">LIDAR_CLOSE_THRESHOLD</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">LIDAR_PENALTY_SCALE</span> <span class="o">*</span> <span class="p">(</span><span class="n">LIDAR_CLOSE_THRESHOLD</span> <span class="o">-</span> <span class="n">min_lidar</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">min_lidar</span> <span class="o">&lt;</span> <span class="n">LIDAR_DANGER_THRESHOLD</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">DANGER_MULTIPLIER</span> <span class="o">*</span> <span class="n">LIDAR_PENALTY_SCALE</span> <span class="o">*</span> <span class="p">(</span><span class="n">LIDAR_DANGER_THRESHOLD</span> <span class="o">-</span> <span class="n">min_lidar</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">collided</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">+=</span> <span class="n">COLLISION_PENALTY</span>  <span class="c1"># strong enough to outweigh the shortcut</span>
+
+    <span class="k">return</span> <span class="n">reward</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><p><strong>Reward breakdown:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Step penalty</td>
+<td style="text-align: left;"><code>-0.2</code> per step</td>
+</tr>
+<tr>
+<td style="text-align: left;">Goal reached</td>
+<td style="text-align: left;"><code>+200.0</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Checkpoint reached</td>
+<td style="text-align: left;"><code>+150.0</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Progress reward (goal)</td>
+<td style="text-align: left;"><code>+10.0 × (prev_dist - cur_dist)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Progress reward (checkpoint)</td>
+<td style="text-align: left;"><code>+10.0 × (prev_dist - cur_dist)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">LiDAR proximity penalty</td>
+<td style="text-align: left;"><code>-3.0 × (0.03 - min_lidar)</code> when <code>min_lidar &lt; 0.03</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">LiDAR danger penalty</td>
+<td style="text-align: left;"><code>-12.0 × (0.02 - min_lidar)</code> when <code>min_lidar &lt; 0.02</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Collision penalty</td>
+<td style="text-align: left;"><code>-400.0</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="api_run_training">run_training</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="train.run_training"></a>
+    <div class="doc doc-contents first">
+
+        <p>The Training function that sets up the environment and trains either a new PPO model or loads an existing one to build upon.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>checkpoint_freq</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequency at which intermediate goal checkpoints spawn in the environment</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>model_path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to an existing model checkpoint to resume from, or a new path to save to</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>data_path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the <code>.npz</code> point cloud file used to build the environment</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>total_timesteps</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Total number of environment timesteps to train for</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_envs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of parallel environments (uses <code>SubprocVecEnv</code>)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_steps</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Steps collected per environment per PPO rollout</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>batch_size</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Minibatch size for PPO gradient updates</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_epochs</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of epochs per PPO update</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>learning_rate</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optimizer learning rate</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>entropy_coef</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Entropy bonus coefficient</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>gae_lambda</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Lambda for Generalized Advantage Estimation</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>gamma</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Reward discount factor</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_grad_norm</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Gradient clipping threshold</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>clip_range</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>PPO policy update clipping range</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the saved final model (without <code>.zip</code> extension).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/train.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_training</span><span class="p">(</span>
+    <span class="n">checkpoint_freq</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">total_timesteps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_envs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">entropy_coef</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">gae_lambda</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">max_grad_norm</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">clip_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Training function that sets up the environment and trains either a new PPO model or loads an existing one to build upon.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        checkpoint_freq: Frequency at which intermediate goal checkpoints spawn in the environment</span>
+<span class="sd">        model_path: Path to an existing model checkpoint to resume from, or a new path to save to</span>
+<span class="sd">        data_path: Path to the `.npz` point cloud file used to build the environment</span>
+<span class="sd">        total_timesteps: Total number of environment timesteps to train for</span>
+<span class="sd">        n_envs: Number of parallel environments (uses `SubprocVecEnv`)</span>
+<span class="sd">        n_steps: Steps collected per environment per PPO rollout</span>
+<span class="sd">        batch_size: Minibatch size for PPO gradient updates</span>
+<span class="sd">        n_epochs: Number of epochs per PPO update</span>
+<span class="sd">        learning_rate: Optimizer learning rate</span>
+<span class="sd">        entropy_coef: Entropy bonus coefficient</span>
+<span class="sd">        gae_lambda: Lambda for Generalized Advantage Estimation</span>
+<span class="sd">        gamma: Reward discount factor</span>
+<span class="sd">        max_grad_norm: Gradient clipping threshold</span>
+<span class="sd">        clip_range: PPO policy update clipping range</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Path to the saved final model (without `.zip` extension).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;checkpoint_frequency&quot;</span><span class="p">:</span> <span class="n">checkpoint_freq</span><span class="p">,</span>
+        <span class="s2">&quot;renders&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;isDiscrete&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;reward_callback&quot;</span><span class="p">:</span> <span class="n">custom_reward</span><span class="p">,</span>
+        <span class="s2">&quot;observation_callback&quot;</span><span class="p">:</span> <span class="n">custom_observation</span><span class="p">,</span>
+        <span class="s2">&quot;environment_map&quot;</span><span class="p">:</span> <span class="n">data_path</span>
+    <span class="p">}</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">make_vec_env</span><span class="p">(</span>
+        <span class="s2">&quot;SimpleDriving-v0&quot;</span><span class="p">,</span>
+        <span class="n">n_envs</span><span class="o">=</span><span class="n">n_envs</span><span class="p">,</span>
+        <span class="n">vec_env_cls</span><span class="o">=</span><span class="n">SubprocVecEnv</span><span class="p">,</span>
+        <span class="n">env_kwargs</span><span class="o">=</span><span class="n">env_kwargs</span><span class="p">,</span>
+        <span class="n">vec_env_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;start_method&quot;</span><span class="p">:</span> <span class="s2">&quot;spawn&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">VecNormalize</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">norm_obs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">norm_reward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clip_reward</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">model_path</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading existing model from </span><span class="si">{</span><span class="n">model_path</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">)</span>
+        <span class="n">ppo_agent</span> <span class="o">=</span> <span class="n">PPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="n">tensorboard_log</span><span class="o">=</span><span class="s2">&quot;./ppo_tensorboard/&quot;</span><span class="p">)</span>             
+        <span class="c1"># Override saved hyperparameters with current values</span>
+        <span class="c1"># PPO.load restores whatever was saved with the checkpoint,</span>
+        <span class="c1"># so without this your constants at the top have no effect on resumed runs</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">get_schedule_fn</span><span class="p">(</span><span class="n">learning_rate</span><span class="p">)</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">ent_coef</span> <span class="o">=</span> <span class="n">entropy_coef</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">clip_range</span> <span class="o">=</span> <span class="n">get_schedule_fn</span><span class="p">(</span><span class="n">clip_range</span><span class="p">)</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">max_grad_norm</span> <span class="o">=</span> <span class="n">max_grad_norm</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">n_epochs</span> <span class="o">=</span> <span class="n">n_epochs</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">gae_lambda</span> <span class="o">=</span> <span class="n">gae_lambda</span>
+        <span class="n">ppo_agent</span><span class="o">.</span><span class="n">set_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hyperparameters updated: lr=</span><span class="si">{</span><span class="n">learning_rate</span><span class="si">}</span><span class="s2">, ent_coef=</span><span class="si">{</span><span class="n">entropy_coef</span><span class="si">}</span><span class="s2">, gamma=</span><span class="si">{</span><span class="n">gamma</span><span class="si">}</span><span class="s2">, gae_lambda=</span><span class="si">{</span><span class="n">gae_lambda</span><span class="si">}</span><span class="s2">, clip_range=</span><span class="si">{</span><span class="n">clip_range</span><span class="si">}</span><span class="s2">, max_grad_norm=</span><span class="si">{</span><span class="n">max_grad_norm</span><span class="si">}</span><span class="s2">, n_epochs=</span><span class="si">{</span><span class="n">n_epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ppo_agent</span> <span class="o">=</span> <span class="n">PPO</span><span class="p">(</span>
+            <span class="s2">&quot;MlpPolicy&quot;</span><span class="p">,</span>
+            <span class="n">env</span><span class="p">,</span>
+            <span class="c1"># --- core params ---</span>
+            <span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span>
+            <span class="n">n_steps</span><span class="o">=</span><span class="n">n_steps</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">n_epochs</span><span class="o">=</span><span class="n">n_epochs</span><span class="p">,</span>
+            <span class="c1"># --- Discount and advantage ---</span>
+            <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+            <span class="n">gae_lambda</span><span class="o">=</span><span class="n">gae_lambda</span><span class="p">,</span>
+            <span class="c1"># --- stability ---</span>
+            <span class="n">clip_range</span><span class="o">=</span><span class="n">clip_range</span><span class="p">,</span>
+            <span class="n">max_grad_norm</span><span class="o">=</span><span class="n">max_grad_norm</span><span class="p">,</span>
+            <span class="c1"># --- exploration ---</span>
+            <span class="n">ent_coef</span><span class="o">=</span><span class="n">entropy_coef</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+            <span class="n">tensorboard_log</span><span class="o">=</span><span class="s2">&quot;./ppo_tensorboard/&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">checkpoint_cb</span> <span class="o">=</span> <span class="n">CheckpointCallback</span><span class="p">(</span>
+        <span class="n">save_freq</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">100_000</span> <span class="o">//</span> <span class="n">n_envs</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./model/checkpoints/&quot;</span><span class="p">,</span>
+        <span class="n">name_prefix</span><span class="o">=</span><span class="s2">&quot;ppo_driving&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ppo_agent</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span>
+        <span class="n">total_timesteps</span><span class="o">=</span><span class="n">total_timesteps</span><span class="p">,</span>
+        <span class="n">callback</span><span class="o">=</span><span class="n">checkpoint_cb</span><span class="p">,</span>
+        <span class="n">reset_num_timesteps</span><span class="o">=</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">model_path</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">model_step_count</span> <span class="o">=</span> <span class="n">ppo_agent</span><span class="o">.</span><span class="n">num_timesteps</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ppo_agent</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;model/ppo_driving_</span><span class="si">{}</span><span class="s2">_steps&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_step_count</span><span class="p">))</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;vecnormalize.pkl&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Agent saved to model/ppo_driving_</span><span class="si">{</span><span class="n">model_step_count</span><span class="si">}</span><span class="s2">_steps.zip and VecNormalize stats saved to model/vecnormalize.pkl&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;model/ppo_driving_</span><span class="si">{}</span><span class="s2">_steps&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_step_count</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div></details>
+<hr style="border: 2px solid #0071ea;">
+<hr style="border: 2px solid #ff53fc90;">
+
+<h2 id="testpy">test.py</h2>
+<details class="info">
+<summary>Click to expand this section</summary>
+<h3 id="api_test_policy">test_policy</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="test.test_policy"></a>
+    <div class="doc doc-contents first">
+
+        <p>Loads a saved PPO model and evaluates it across three required obstacle scenarios with rendering enabled.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>checkpoint_freq</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Frequency at which intermediate goal checkpoints spawn in the test environment. Should match the value used during training. Default: <code>10</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>10</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>model_path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Relative path to the saved PPO model checkpoint. The <code>.zip</code> extension is optional — it will be appended automatically if missing. Default: <code>"model/checkpoints/ppo_driving_13700000_steps"</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;model/checkpoints/ppo_driving_13700000_steps&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>data_path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Relative path to the <code>.npz</code> point cloud file used to build the test environment. Default: <code>"pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/test.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_policy</span><span class="p">(</span>
+    <span class="n">checkpoint_freq</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;model/checkpoints/ppo_driving_13700000_steps&quot;</span><span class="p">,</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a saved PPO model and evaluates it across three required obstacle scenarios with rendering enabled.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        checkpoint_freq: Frequency at which intermediate goal checkpoints spawn in the test environment. Should match the value used during training. Default: `10`</span>
+<span class="sd">        model_path: Relative path to the saved PPO model checkpoint. The `.zip` extension is optional — it will be appended automatically if missing. Default: `&quot;model/checkpoints/ppo_driving_13700000_steps&quot;`</span>
+<span class="sd">        data_path: Relative path to the `.npz` point cloud file used to build the test environment. Default: `&quot;pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz&quot;`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading saved PPO model...&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading environment with rendering enabled...&quot;</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;SimpleDriving-v0&quot;</span><span class="p">,</span> <span class="n">checkpoint_frequency</span><span class="o">=</span><span class="n">checkpoint_freq</span><span class="p">,</span> <span class="n">renders</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isDiscrete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reward_callback</span><span class="o">=</span><span class="n">custom_reward</span><span class="p">,</span> <span class="n">observation_callback</span><span class="o">=</span><span class="n">custom_observation</span><span class="p">,</span> <span class="n">environment_map</span><span class="o">=</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="c1">#model.set_env(env)</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="n">model_path</span> <span class="k">if</span> <span class="n">model_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.zip&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">model_path</span> <span class="o">+</span> <span class="s2">&quot;.zip&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">PPO</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+
+    <span class="n">scenarios</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;midpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;random_pos&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting evaluation covering the </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">scenarios</span><span class="p">)</span><span class="si">}</span><span class="s2"> required obstacle scenarios...&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ep</span><span class="p">,</span> <span class="n">scenario</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scenarios</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Scenario </span><span class="si">{</span><span class="n">ep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">scenario</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> ---&quot;</span><span class="p">)</span>
+        <span class="n">obs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;scenario&quot;</span><span class="p">:</span> <span class="n">scenario</span><span class="p">})</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">_states</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">terminated</span><span class="p">,</span> <span class="n">truncated</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">episode_reward</span> <span class="o">+=</span> <span class="n">reward</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="n">terminated</span> <span class="ow">or</span> <span class="n">truncated</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode </span><span class="si">{</span><span class="n">ep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> finished - Total Reward: </span><span class="si">{</span><span class="n">episode_reward</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><p><strong>Scenarios run:</strong></p>
+<p>The model is tested in 3 separate scenarios each with a randomly generated environment. Each time the environment is reset, the policy runs deterministically (<code>deterministic=True</code>) until <code>terminated</code> or <code>truncated</code> is set, and the total episode reward is printed to stdout.</p>
+</details>
+<hr style="border: 2px solid #ff53fc90;">
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": "toc.integrate", "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
