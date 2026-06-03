@@ -86,28 +86,6 @@ See below for a list of parameters:
 
 | **Parameter** | **Type** | **Description** | **Default** |
 | :--- | :--- | :--- | :--- |
-| --laz | string | The filepath of the PointCloud laz file to use. | ```"pointclouds/1/Denoise_NoVeg_Subsampled.laz"``` |
-
-Example command with all arguments specified:
-```bash
-python src\main.py pointclouds/1/Denoise_NoVeg_Subsampled.laz        
-```
-
-Newly trained models will be saved in the "model/" folder.
-
-To adjust the training values and generally configure the system please modify the "GLOBAL CONFIGURATION PARAMETERS" from the "main.py" file
-
-## Usage Guide
-
-To run the full system, run the main.py script from terminal after activating the virtual environment in the root directory of the repository:
-```bash
-python .\src\main.py
-```
-
-See below for a list of parameters:
-
-| **Parameter** | **Type** | **Description** | **Default** |
-| :--- | :--- | :--- | :--- |
 | `--run_cluster` | boolean | Whether to run the clustering script before training/testing. | `True` |
 | `--run_train` | boolean | Whether to run the training process. | `False` |
 | `--run_test` | boolean | Whether to run the testing process immediately after. | `True` |
