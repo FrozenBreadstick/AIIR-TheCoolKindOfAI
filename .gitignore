@@ -213,5 +213,6 @@ __marimo__/
 #Other config stuff
 *.ini
 
-tensor_data/**/*.mp4
+*.mp4
+tensor_data/
 
