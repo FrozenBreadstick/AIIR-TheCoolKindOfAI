@@ -75,12 +75,28 @@ To adjust the training values and generally configure the system please modify t
 
 ## Demo Video
 
-TODO REPLACE WITH ACTUAL DEMO VIDEO
+Below is a video demonstrating how to run the system and what can be expected when you do
+
 <video controls width="100%">
-  <source src="media/both.mp4" type="video/mp4">
+  <source src="media\AIIR-Demo.mp4" type="video/mp4">
 </video>
 
 <hr style="border: 5px solid #6e00a1ca;">
+
+<div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px;">
+  <div style="flex: 1; min-width: 280px;">
+    <h3 style="margin-bottom: 8px;">Car almost clears corner</h3>
+    <video controls width="100%">
+      <source src="media\car_almost_gets_around_corner.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div style="flex: 1; min-width: 280px;">
+    <h3 style="margin-bottom: 8px;">Car successfully clears corner</h3>
+    <video controls width="100%">
+      <source src="docs\media\car_succeeds_around_cornor.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 # Point Cloud Segmentation
 
