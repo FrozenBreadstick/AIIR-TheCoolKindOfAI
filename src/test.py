@@ -6,12 +6,13 @@ import simple_driving
 import time
 from train import custom_reward, custom_observation
 
-def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_driving_13700000_steps.zip"):
+def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_driving_13700000_steps"):
     print("Loading saved PPO model...")
 
     print("Loading environment with rendering enabled...")
     env = gym.make("SimpleDriving-v0", checkpoint_frequency=checkpoint_freq, renders=True, isDiscrete=False, reward_callback=custom_reward, observation_callback=custom_observation, environment_map=r"pointclouds\1_Denoise_NoVeg_Subsampled_centroid.npz")
     #model.set_env(env)
+    model_path = model_path if model_path.endswith(".zip") else model_path + ".zip"
     model = PPO.load(model_path, env=env)
 
     scenarios = ["midpoint", "none", "random_pos"]

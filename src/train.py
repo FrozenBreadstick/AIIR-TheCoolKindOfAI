@@ -33,27 +33,6 @@ LIDAR_PENALTY_SCALE = -3.0
 COLLISION_PENALTY = -400.0  
 
 # ========================================================
-# Training Configuration Parameters
-# ========================================================
-TOTAL_TIMESTEPS = 3_000_000
-N_ENVS = 8
-N_STEPS = 1024
-BATCH_SIZE = 512
-N_EPOCHS = 4
-LEARNING_RATE = 0.0001
-ENTROPY_COEF = 0.15
-GAE_LAMBDA = 0.95
-GAMMA = 0.995
-MAX_GRAD_NORM = 0.3
-CLIP_RANGE = 0.2
-
-# Checkpoint frequency in terms of how many goals spawn in the environment (not PPO update steps)
-CHECKPOINT_FREQ = 40
-
-# include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
-MODEL_PATH      = "model\checkpoints\ppo_driving_10700000_steps"
-
-# ========================================================
 # Custom Reward and Observation Callbacks
 # ========================================================
 def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpoint_pos, checkpoint_orn, lidar_readings):
@@ -142,9 +121,9 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
 # ========================================================
 
 # You can change these variables for more training steps or if you have a powerful CPU:
-def run_training() -> None:
+def run_training(checkpoint_freq, model_path, total_timesteps, n_envs, n_steps, batch_size, n_epochs, learning_rate, entropy_coef, gae_lambda, gamma, max_grad_norm, clip_range) -> None:
     env_kwargs = {
-        "checkpoint_frequency": CHECKPOINT_FREQ,
+        "checkpoint_frequency": checkpoint_freq,
         "renders": False,
         "isDiscrete": False,
         "reward_callback": custom_reward,
@@ -153,7 +132,7 @@ def run_training() -> None:
     }
     env = make_vec_env(
         "SimpleDriving-v0",
-        n_envs=N_ENVS,
+        n_envs=n_envs,
         vec_env_cls=SubprocVecEnv,
         env_kwargs=env_kwargs,
         vec_env_kwargs={"start_method": "spawn"}
@@ -161,59 +140,59 @@ def run_training() -> None:
 
     env = VecNormalize(env, norm_obs=False, norm_reward=True, clip_reward=10.0)
 
-    if os.path.exists(MODEL_PATH + ".zip"):
-        print(f"Loading existing model from {MODEL_PATH} ...")
-        ppo_agent = PPO.load(MODEL_PATH, env=env, device="cpu", tensorboard_log="./ppo_tensorboard/")             
+    if os.path.exists(model_path + ".zip"):
+        print(f"Loading existing model from {model_path} ...")
+        ppo_agent = PPO.load(model_path, env=env, device="cpu", tensorboard_log="./ppo_tensorboard/")             
         # Override saved hyperparameters with current values
         # PPO.load restores whatever was saved with the checkpoint,
         # so without this your constants at the top have no effect on resumed runs
-        ppo_agent.learning_rate = get_schedule_fn(LEARNING_RATE)
-        ppo_agent.ent_coef = ENTROPY_COEF
-        ppo_agent.clip_range = get_schedule_fn(CLIP_RANGE)
-        ppo_agent.max_grad_norm = MAX_GRAD_NORM
-        ppo_agent.n_epochs = N_EPOCHS
-        ppo_agent.gamma = GAMMA
-        ppo_agent.gae_lambda = GAE_LAMBDA
+        ppo_agent.learning_rate = get_schedule_fn(learning_rate)
+        ppo_agent.ent_coef = entropy_coef
+        ppo_agent.clip_range = get_schedule_fn(clip_range)
+        ppo_agent.max_grad_norm = max_grad_norm
+        ppo_agent.n_epochs = n_epochs
+        ppo_agent.gamma = gamma
+        ppo_agent.gae_lambda = gae_lambda
         ppo_agent.set_env(env)
-        print(f"Hyperparameters updated: lr={LEARNING_RATE}, ent_coef={ENTROPY_COEF}, gamma={GAMMA}")
+        print(f"Hyperparameters updated: lr={learning_rate}, ent_coef={entropy_coef}, gamma={gamma}, gae_lambda={gae_lambda}, clip_range={clip_range}, max_grad_norm={max_grad_norm}, n_epochs={n_epochs}")
     else:
         ppo_agent = PPO(
             "MlpPolicy",
             env,
             # --- core params ---
-            learning_rate=LEARNING_RATE,
-            n_steps=N_STEPS,
-            batch_size=BATCH_SIZE,
-            n_epochs=N_EPOCHS,
+            learning_rate=learning_rate,
+            n_steps=n_steps,
+            batch_size=batch_size,
+            n_epochs=n_epochs,
             # --- Discount and advantage ---
-            gamma=GAMMA,
-            gae_lambda=GAE_LAMBDA,
+            gamma=gamma,
+            gae_lambda=gae_lambda,
             # --- stability ---
-            clip_range=CLIP_RANGE,
-            max_grad_norm=MAX_GRAD_NORM,
+            clip_range=clip_range,
+            max_grad_norm=max_grad_norm,
             # --- exploration ---
-            ent_coef=ENTROPY_COEF,
+            ent_coef=entropy_coef,
             verbose=1,
             device="cpu",
             tensorboard_log="./ppo_tensorboard/"
         )
 
     checkpoint_cb = CheckpointCallback(
-        save_freq=max(100_000 // N_ENVS, 1),
+        save_freq=max(100_000 // n_envs, 1),
         save_path="./model/checkpoints/",
         name_prefix="ppo_driving",
     )
 
     ppo_agent.learn(
-        total_timesteps=TOTAL_TIMESTEPS,
+        total_timesteps=total_timesteps,
         callback=checkpoint_cb,
-        reset_num_timesteps=not os.path.exists(MODEL_PATH + ".zip"),
+        reset_num_timesteps=not os.path.exists(model_path + ".zip"),
     )
 
     os.makedirs("model", exist_ok=True)
-    ppo_agent.save(MODEL_PATH)
+    ppo_agent.save(model_path)
     env.save(os.path.join("model", "vecnormalize.pkl"))
-    print(f"Agent saved to {MODEL_PATH}")
+    print(f"Agent saved to {model_path}.zip and VecNormalize stats saved to model/vecnormalize.pkl")
 
 if __name__ == "__main__":
     run_training()
