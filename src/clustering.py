@@ -239,19 +239,19 @@ def CedricCentroid(points: np.ndarray, cluster_labels: np.ndarray, filename: str
     print("Centroids and Bounds Found")
     return np.array(centroids), np.array(metrics)
 
-def main() -> str:
+def main(path=None) -> str:
     """
     The main function that runs all the necessary components to run the Point Cloud segmentation workflow.
     """
-    parser = argparse.ArgumentParser(description="Point Cloud Processing for Identifying Buildings")
-    parser.add_argument("path", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
-    args = parser.parse_args()
+
+    if path is None:
+        path = "pointclouds/1/Denoise_NoVeg_Subsampled.laz"
 
     # Load Data
-    pat = args.path.rsplit('/', 1)
+    pat = path.rsplit('/', 1)
     filename = pat[-2] + "_" + pat[-1]
     filename = filename.replace(".laz", "") # Fix filepath
-    points, original_gt_labels = load_laz(args.path, filename)
+    points, original_gt_labels = load_laz(path, filename)
 
     # Classify with RandomForest on a point by point basis
     predict_gt_labels = FelicityRandomForest(points, original_gt_labels, filename)
@@ -268,4 +268,8 @@ def main() -> str:
     return final_filename
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Point Cloud Processing for Identifying Buildings")
+    parser.add_argument("path", nargs="?", default="pointclouds/1/Denoise_NoVeg_Subsampled.laz")
+    args = parser.parse_args()
+
+    main(args.path)

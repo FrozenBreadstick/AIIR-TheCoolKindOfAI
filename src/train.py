@@ -7,6 +7,7 @@ from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 from stable_baselines3.common.utils import get_schedule_fn
+from pybullet_utils import bullet_client as bc
 import simple_driving
 import time
 import os
@@ -35,8 +36,32 @@ COLLISION_PENALTY = -400.0
 # ========================================================
 # Custom Reward and Observation Callbacks
 # ========================================================
-def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpoint_pos, checkpoint_orn, lidar_readings):
+def custom_observation(
+    client: bc.BulletClient,
+    car_pos: tuple,
+    car_orn: tuple,
+    goal_pos_1: tuple,
+    goal_orn_1: tuple,
+    checkpoint_pos: tuple | None,
+    checkpoint_orn: tuple | None,
+    lidar_readings: np.ndarray
+) -> np.ndarray:
+    """
+    Constructs the custom observation array for the environment.
 
+    Args:
+        client: Active PyBullet physics client used for coordinate transforms
+        car_pos: Current world-space position of the car `(x, y, z)`
+        car_orn: Current world-space orientation of the car as a quaternion
+        goal_pos_1: World-space position of the primary end goal
+        goal_orn_1: World-space orientation of the primary end goal
+        checkpoint_pos: World-space position of the active checkpoint, or `None` if no checkpoint is active
+        checkpoint_orn: World-space orientation of the active checkpoint
+        lidar_readings: Raw normalised LiDAR distances from the car to surrounding obstacles
+
+    Returns:
+        A flat observation array of shape `(4 + N,)` where the first 4 elements are the relative (x, y) positions of the goal and checkpoint in the car's local frame, and the remaining N elements are the LiDAR readings.
+    """
     observation = [0.0, 0.0, 0.0, 0.0] # placeholder for relative goal position (x, y) of the 3 goals
 
     if checkpoint_pos is None:
@@ -78,9 +103,38 @@ def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpo
     return observation
 
 
-def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist_to_goal_1, prev_dist_to_checkpoint,
-                  dist_to_goal_1, dist_to_checkpoint, reached_goal_1, reached_checkpoint, collided):
+def custom_reward(
+    car_pos: tuple,
+    goal_pos_1: tuple,
+    checkpoint_pos: tuple | None,
+    lidar_readings: np.ndarray,
+    prev_dist_to_goal_1: float | None,
+    prev_dist_to_checkpoint: float | None,
+    dist_to_goal_1: float,
+    dist_to_checkpoint: float | None,
+    reached_goal_1: bool,
+    reached_checkpoint: bool,
+    collided: bool
+) -> float:
+    """
+    Calculates the environment reward for the current step.
 
+    Args:
+        car_pos: Current world-space position of the car
+        goal_pos_1: World-space position of the primary end goal
+        checkpoint_pos: World-space position of the active checkpoint
+        lidar_readings: Normalised LiDAR distances (same as passed to `custom_observation`)
+        prev_dist_to_goal_1: Distance to the goal at the previous step
+        prev_dist_to_checkpoint: Distance to the checkpoint at the previous step
+        dist_to_goal_1: Distance to the goal at the current step
+        dist_to_checkpoint: Distance to the checkpoint at the current step, or `None` if inactive
+        reached_goal_1: Whether the car reached the primary goal this step
+        reached_checkpoint: Whether the car reached the active checkpoint this step
+        collided: Whether the car collided with an obstacle this step
+
+    Returns:
+        The total scalar reward for this step.
+    """
     reward = 0.0
 
     # step penalty
@@ -121,25 +175,43 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
 # ========================================================
 
 # You can change these variables for more training steps or if you have a powerful CPU:
-def run_training(checkpoint_freq, model_path, total_timesteps, n_envs, n_steps, batch_size, n_epochs, learning_rate, entropy_coef, gae_lambda, gamma, max_grad_norm, clip_range, data_path="pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz") -> str:
+def run_training(
+    checkpoint_freq: int,
+    model_path: str,
+    total_timesteps: int,
+    n_envs: int,
+    n_steps: int,
+    batch_size: int,
+    n_epochs: int,
+    learning_rate: float,
+    entropy_coef: float,
+    gae_lambda: float,
+    gamma: float,
+    max_grad_norm: float,
+    clip_range: float,
+    data_path: str = "pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"
+) -> str:
     """
     The Training function that sets up the environment and trains either a new PPO model or loads an existing one to build upon.
-    
-    Parameters:
-    checkpoint_freq (int): The frequency at which goals spawn in the environment
-    model_path (str): The relative path to the saved PPO model checkpoint (without the .zip extension)
-    data_path (str): The relative path to the point cloud data file
-    total_timesteps (int): The total number of timesteps to train for
-    n_envs (int): The number of parallel environments to use for training
-    n_steps (int): The number of steps to run in each environment per update
-    batch_size (int): The batch size for training
-    n_epochs (int): The number of epochs to train on each update
-    learning_rate (float): The learning rate for the PPO optimizer
-    entropy_coef (float): The coefficient for the PPO entropy bonus
-    gae_lambda (float): The lambda parameter for Generalized Advantage Estimation
-    gamma (float): The discount factor for rewards
-    max_grad_norm (float): The maximum norm for gradient clipping
-    clip_range (float): The clipping range for PPO's policy updates
+
+    Args:
+        checkpoint_freq: Frequency at which intermediate goal checkpoints spawn in the environment
+        model_path: Path to an existing model checkpoint to resume from, or a new path to save to
+        data_path: Path to the `.npz` point cloud file used to build the environment
+        total_timesteps: Total number of environment timesteps to train for
+        n_envs: Number of parallel environments (uses `SubprocVecEnv`)
+        n_steps: Steps collected per environment per PPO rollout
+        batch_size: Minibatch size for PPO gradient updates
+        n_epochs: Number of epochs per PPO update
+        learning_rate: Optimizer learning rate
+        entropy_coef: Entropy bonus coefficient
+        gae_lambda: Lambda for Generalized Advantage Estimation
+        gamma: Reward discount factor
+        max_grad_norm: Gradient clipping threshold
+        clip_range: PPO policy update clipping range
+
+    Returns:
+        Path to the saved final model (without `.zip` extension).
     """
     env_kwargs = {
         "checkpoint_frequency": checkpoint_freq,

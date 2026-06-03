@@ -3,6 +3,8 @@ theme:
   name: material
   palette:
     scheme: slate
+  features:
+    toc.integrate
 
 extra_css:
   - stylesheets/extra.css
@@ -19,4 +21,11 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - attr_list
-  
+
+nav:
+  - Home: index.md
+  - Clustering: clustering.md
+  - Environment: environment.md
+  - Agent: car.md
+  - API: api.md
+

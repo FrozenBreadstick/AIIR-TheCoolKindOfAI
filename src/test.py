@@ -6,14 +6,18 @@ import simple_driving
 import time
 from train import custom_reward, custom_observation
 
-def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_driving_13700000_steps", data_path = "pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"):
+def test_policy(
+    checkpoint_freq: int = 10,
+    model_path: str = "model/checkpoints/ppo_driving_13700000_steps",
+    data_path: str = "pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"
+) -> None:
     """
-    The Test function that loads a saved PPO model, launches a testing environment, and allows a user to evaluate its performance.
-    
-    Parameters:
-    checkpoint_freq (int): The frequency at which goals spawn in the environment
-    model_path (str): The relative path to the saved PPO model checkpoint (without the .zip extension)
-    data_path (str): The relative path to the point cloud data file
+    Loads a saved PPO model and evaluates it across three required obstacle scenarios with rendering enabled.
+
+    Args:
+        checkpoint_freq: Frequency at which intermediate goal checkpoints spawn in the test environment. Should match the value used during training. Default: `10`
+        model_path: Relative path to the saved PPO model checkpoint. The `.zip` extension is optional — it will be appended automatically if missing. Default: `"model/checkpoints/ppo_driving_13700000_steps"`
+        data_path: Relative path to the `.npz` point cloud file used to build the test environment. Default: `"pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz"`
     """
     print("Loading saved PPO model...")
 
@@ -44,4 +48,4 @@ def test_policy(checkpoint_freq = 10, model_path = "model\checkpoints\ppo_drivin
     env.close()
 
 if __name__ == "__main__":
-    test_policy(checkpoint_freq=40, model_path="model\checkpoints\ppo_driving_13700000_steps.zip", data_path="pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz")
+    test_policy(checkpoint_freq=40, model_path="model/checkpoints/ppo_driving_13700000_steps.zip", data_path="pointclouds/1_Denoise_NoVeg_Subsampled_centroid.npz")
