@@ -9,3 +9,11 @@
     - train.py -> Trains the car to drive to the goal
     - test.py -> Tests trained car AI model
     - main.py -> Runs the main sequence of events, (custering -> environment -> train -> test)
+
+/tensor_data contains previous trained models and figures from the tensorboard at time of training finish
+    - ppo39.10 refers to a model that was trained with goals every 10 metres
+    - ppo39.30 refers to a model that was trained with goals every 30 metres
+    - ppo39.30_2 refers to a more extensively trained model with goals every 30 metres
+    - ppo39.40_137 refers to a model that was trained with goals every 40 metres and had 13 700 000 steps of training.
+
+    note: that these models are trained using the previous model as a starting point. ppo39.40_137 started training at 7 700 000 steps where ppo39.30_2 left off.
