@@ -87,7 +87,6 @@ See below for a list of parameters:
 | --path | string | The filepath of the PointCloud laz file to use. | ```"pointclouds/1/Denoise_NoVeg_Subsampled.laz"``` |
 
 
-TODO ADD TO HERE FOR ALL ARGUMENTS THAT EXIST
 Example command with all arguments specified:
 ```bash
 python src\main.py pointclouds/1/Denoise_NoVeg_Subsampled.laz        
@@ -141,7 +140,7 @@ See below for a list of parameters:
 
 Example command:
 ```bash
-python .\src\clustering.py --path "pointclouds/1/Denoise_NoVeg_Subsampled.laz"
+python src\main.py pointclouds/1/Denoise_NoVeg_Subsampled.laz       
 ```
 
 <hr style="border: 5px solid #c20000d7;">
