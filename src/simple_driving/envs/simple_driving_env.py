@@ -28,6 +28,7 @@ class SimpleDrivingEnv(gym.Env):
         reward_callback=None,
         observation_callback=None,
         environment_map=None,
+        checkpoint_frequency=10,
         **kwargs
     ):
         if (isDiscrete):
@@ -76,7 +77,7 @@ class SimpleDrivingEnv(gym.Env):
         self.step_counter = 0
         self.collision_detected = False
         self.goal_1_reward_given = False
-        self.checkpoint_frequency = 40 # how many path points to skip before spawning a checkpoint, can be tuned based on the density of the map and the desired difficulty of the task
+        self.checkpoint_frequency = checkpoint_frequency # how many path points to skip before spawning a checkpoint, can be tuned based on the density of the map and the desired difficulty of the task
 
         # --- Configurable Limits ---
         self.minimum_safe_distance = minimum_safe_distance

@@ -130,7 +130,7 @@ MODEL_PATH      = "model\checkpoints\ppo_driving_10700000_steps"
 
 def run_training() -> None:
     env_kwargs = {
-        
+        "checkpoint_frequency": 40,
         "renders": False,
         "isDiscrete": False,
         "reward_callback": custom_reward,
