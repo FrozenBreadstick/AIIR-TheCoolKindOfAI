@@ -21,17 +21,41 @@ if torch.cuda.is_available():
 # ========================================================
 # Reward Function Configuration Parameters
 # ========================================================
-GOAL_REWARD_1 = 200.0
-GOAL_REWARD_2 = 150.0
+GOAL_REWARD_1 = 200.0   # GOAL REWARD 1 and PROGRESS REWARD SCALE 1 refer to the main goal at the end of the track
+GOAL_REWARD_2 = 150.0   # GOAL REWARD 2 and PROGRESS REWARD SCALE 2 refer to the checkpoints that spawn along the track
 STEP_PENALTY = -0.2
 PROGRESS_REWARD_SCALE_1 = 10.0
 PROGRESS_REWARD_SCALE_2 = 10.0
 LIDAR_CLOSE_THRESHOLD = 0.03
 LIDAR_DANGER_THRESHOLD = 0.02
-DANGER_MULTIPLIER = 4.0  # how much more to penalise dangerously close obstacles compared to just close ones
+DANGER_MULTIPLIER = 4.0 
 LIDAR_PENALTY_SCALE = -3.0
-COLLISION_PENALTY = -400.0      # strong penalty for collisions to encourage avoidance
+COLLISION_PENALTY = -400.0  
 
+# ========================================================
+# Training Configuration Parameters
+# ========================================================
+TOTAL_TIMESTEPS = 3_000_000
+N_ENVS = 8
+N_STEPS = 1024
+BATCH_SIZE = 512
+N_EPOCHS = 4
+LEARNING_RATE = 0.0001
+ENTROPY_COEF = 0.15
+GAE_LAMBDA = 0.95
+GAMMA = 0.995
+MAX_GRAD_NORM = 0.3
+CLIP_RANGE = 0.2
+
+# Checkpoint frequency in terms of how many goals spawn in the environment (not PPO update steps)
+CHECKPOINT_FREQ = 40
+
+# include the relative model path you would like to start your training from. Delete the .zip file if you want to start fresh.
+MODEL_PATH      = "model\checkpoints\ppo_driving_10700000_steps"
+
+# ========================================================
+# Custom Reward and Observation Callbacks
+# ========================================================
 def custom_observation(client, car_pos, car_orn, goal_pos_1, goal_orn_1, checkpoint_pos, checkpoint_orn, lidar_readings):
 
     observation = [0.0, 0.0, 0.0, 0.0] # placeholder for relative goal position (x, y) of the 3 goals
@@ -113,24 +137,14 @@ def custom_reward(car_pos, goal_pos_1, checkpoint_pos, lidar_readings, prev_dist
 
     return reward
 
+# ========================================================
+# Training Loop
+# ========================================================
+
 # You can change these variables for more training steps or if you have a powerful CPU:
-TOTAL_TIMESTEPS = 3_000_000
-N_ENVS = 8
-N_STEPS = 1024
-BATCH_SIZE = 512
-N_EPOCHS = 4
-LEARNING_RATE = 0.0001
-ENTROPY_COEF = 0.15
-GAE_LAMBDA = 0.95
-GAMMA = 0.995
-MAX_GRAD_NORM = 0.3
-CLIP_RANGE = 0.2
-
-MODEL_PATH      = "model\checkpoints\ppo_driving_10700000_steps"
-
 def run_training() -> None:
     env_kwargs = {
-        "checkpoint_frequency": 40,
+        "checkpoint_frequency": CHECKPOINT_FREQ,
         "renders": False,
         "isDiscrete": False,
         "reward_callback": custom_reward,
